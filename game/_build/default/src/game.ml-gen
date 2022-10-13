@@ -1,0 +1,2 @@
+(** @canonical Game.Start *)
+module Start = Game__Start
