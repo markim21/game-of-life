@@ -1,2 +1,10 @@
-(** @canonical Game.Start *)
-module Start = Game__Start
+(** @canonical Game.Grid *)
+module Grid = Game__Grid
+
+
+(** @canonical Game.Menu *)
+module Menu = Game__Menu
+
+
+(** @canonical Game.State *)
+module State = Game__State
