@@ -12,11 +12,29 @@
    game.cmx
    game.cmxa
    game.ml
+   game__Grid.cmi
+   game__Grid.cmt
+   game__Grid.cmti
+   game__Grid.cmx
+   game__Menu.cmi
+   game__Menu.cmt
+   game__Menu.cmti
+   game__Menu.cmx
    game__Start.cmi
    game__Start.cmt
    game__Start.cmx
+   game__State.cmi
+   game__State.cmt
+   game__State.cmti
+   game__State.cmx
+   grid.ml
+   grid.mli
+   menu.ml
+   menu.mli
    opam
-   start.ml))
+   start.ml
+   state.ml
+   state.mli))
  (libexec (game.cmxs)))
 (library
  (name Game)
@@ -30,7 +48,11 @@
  (modules
   (wrapped
    (main_module_name Game)
-   (modules ((name Start) (obj_name game__Start) (visibility public) (impl)))
+   (modules
+    ((name Grid) (obj_name game__Grid) (visibility public) (impl) (intf))
+    ((name Menu) (obj_name game__Menu) (visibility public) (impl) (intf))
+    ((name Start) (obj_name game__Start) (visibility public) (impl))
+    ((name State) (obj_name game__State) (visibility public) (impl) (intf)))
    (alias_module
     (name Game)
     (obj_name game)
