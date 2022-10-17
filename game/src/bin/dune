@@ -1,0 +1,3 @@
+(executable
+ (name start)
+ (libraries graphics))

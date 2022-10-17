@@ -16,9 +16,6 @@ lib: [
   "_build/install/default/lib/Game/game__Menu.cmt"
   "_build/install/default/lib/Game/game__Menu.cmti"
   "_build/install/default/lib/Game/game__Menu.cmx"
-  "_build/install/default/lib/Game/game__Start.cmi"
-  "_build/install/default/lib/Game/game__Start.cmt"
-  "_build/install/default/lib/Game/game__Start.cmx"
   "_build/install/default/lib/Game/game__State.cmi"
   "_build/install/default/lib/Game/game__State.cmt"
   "_build/install/default/lib/Game/game__State.cmti"
@@ -28,7 +25,6 @@ lib: [
   "_build/install/default/lib/Game/menu.ml"
   "_build/install/default/lib/Game/menu.mli"
   "_build/install/default/lib/Game/opam"
-  "_build/install/default/lib/Game/start.ml"
   "_build/install/default/lib/Game/state.ml"
   "_build/install/default/lib/Game/state.mli"
 ]

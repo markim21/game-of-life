@@ -1,9 +1,9 @@
-# dune build --watch
+# dune build @doc
 # OCAMLPARAM: unset
 # Shared cache: disabled
 # Workspace root: /home/fc323/3110/game/game
 # Auto-detected concurrency: 16
-$ /home/fc323/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_faedb7_output
+$ /home/fc323/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /tmp/dune_16eb76_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"

@@ -20,9 +20,6 @@
    game__Menu.cmt
    game__Menu.cmti
    game__Menu.cmx
-   game__Start.cmi
-   game__Start.cmt
-   game__Start.cmx
    game__State.cmi
    game__State.cmt
    game__State.cmti
@@ -32,7 +29,6 @@
    menu.ml
    menu.mli
    opam
-   start.ml
    state.ml
    state.mli))
  (libexec (game.cmxs)))
@@ -51,7 +47,6 @@
    (modules
     ((name Grid) (obj_name game__Grid) (visibility public) (impl) (intf))
     ((name Menu) (obj_name game__Menu) (visibility public) (impl) (intf))
-    ((name Start) (obj_name game__Start) (visibility public) (impl))
     ((name State) (obj_name game__State) (visibility public) (impl) (intf)))
    (alias_module
     (name Game)

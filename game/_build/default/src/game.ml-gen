@@ -6,9 +6,5 @@ module Grid = Game__Grid
 module Menu = Game__Menu
 
 
-(** @canonical Game.Start *)
-module Start = Game__Start
-
-
 (** @canonical Game.State *)
 module State = Game__State
