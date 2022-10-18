@@ -15,4 +15,4 @@ test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
 play:
-	OCAMLRUNPARAM=b dune exec src/bin/start.exe
+	OCAMLRUNPARAM=b dune exec bin/main.exe
