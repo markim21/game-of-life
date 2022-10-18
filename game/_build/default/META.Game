@@ -1,5 +1,5 @@
 description = ""
-requires = "graphics"
+requires = "graphics unix"
 archive(byte) = "game.cma"
 archive(native) = "game.cmxa"
 plugin(byte) = "game.cma"
