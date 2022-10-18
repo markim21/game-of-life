@@ -1,1 +1,1 @@
-src/grid.ml: Graphics
+src/grid.ml: Array Graphics

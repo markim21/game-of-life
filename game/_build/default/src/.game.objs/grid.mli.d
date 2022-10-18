@@ -1,1 +1,1 @@
-src/grid.mli:
+src/grid.mli: Graphics
