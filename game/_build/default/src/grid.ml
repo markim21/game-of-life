@@ -10,6 +10,13 @@ type grid = {
   squares : square array array;
 }
 
+(** [print_x_y x y] prints 'x AND y'; for debugging math*)
+let print_x_y x y =
+  print_int x;
+  print_string " AND ";
+  print_int y;
+  print_newline ()
+
 let make_grid m n =
   { y = m; x = n; squares = Array.make m (Array.make n Alive) }
 
@@ -46,4 +53,30 @@ let init_grid grid =
   fill_rect 0 0 1000 1000;
   update_grid grid
 
-let click_square = None
+let click_square y x grid =
+  print_x_y (y * grid.y / 1000) (x * grid.y / 1000);
+  change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
+
+let rec listen_square grid =
+  let status = wait_next_event [ Button_up; Key_pressed ] in
+  if button_down () then (
+    let x, y = mouse_pos () in
+    print_x_y x y;
+    if x < 1000 && y < 1000 then (
+      click_square y x grid;
+      update_grid grid;
+      (* Unix.sleep 1; *)
+      listen_square grid)
+    else (* Unix.sleep 1; *)
+      listen_square grid)
+  else if key_pressed () then
+    match read_key () with
+    | ' ' ->
+        print_string "PRESSED EXIT";
+        exit 0
+    | _ ->
+        (* Unix.sleep 1; *)
+        listen_square grid
+  else Unix.sleep 1;
+  print_string "HERE NOTHING HAPPENED";
+  listen_square grid
