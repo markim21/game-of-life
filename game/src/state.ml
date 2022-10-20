@@ -82,30 +82,24 @@ let get_next_square_state (square : Grid.square) (grid : Grid.grid) : bool =
 
 
 let change_square_state (square: Grid.square) (grid : Grid.grid): Grid.square = 
-
-  let square : Grid.square = 
   {
     x = square.x;
     y = square.y;
-    alive = get_next_square_state square grid } in square
+    alive = get_next_square_state square grid 
+  }
 
 (* Helper function to map a function to every element of a list *)
 let twice_map f = Array.map( Array.map f )
 
-
-
-(* Evaluate the new state for every block in a given grid. 
+(* 
+  Evaluate the new state for every block in a given grid. 
     1. create new grid with an empty array 
     2. iterate through each square in the grid 
     2. evaluate each square. add to new grid 
-    *)
-let get_new_game (grid: Grid.grid) : Grid.grid = 
-  twice_map (fun x -> change_square_state x grid ) grid.squares
-
-let get_next_game_state (grid : Grid.grid) : Grid.grid = 
-  let squares = grid.squares 
-   
-  
-  
-
-
+*)
+let get_new_grid (grid: Grid.grid) : Grid.grid = 
+  {
+    x = grid.x;
+    y = grid.y;
+    squares = twice_map (fun x -> change_square_state x grid) grid.squares 
+  }
