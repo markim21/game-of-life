@@ -1,4 +1,5 @@
 (** Updating a grid to produce new generations of grids *)
+
 open Array
 
 type square 
