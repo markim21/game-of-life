@@ -66,13 +66,21 @@ let get_live_count (lst : Grid.square list) : int =
   count_living_tr lst 0
 
 
-
 (* For a given square, determine the square's next state
    based on the square's neighbors. 
       1. get the square's neighbors
       2. get how many of its neighbors are alive
       3. if square is alive --> <game of life rules>
       4. return new state as boolean  *)
+
+let get_next_state (square : Grid.square) (grid : Grid.grid) : bool = 
+  let live_count = 
+    (get_neighbor_coordinates square grid coordinates []) |> get_live_count in 
+
+    if square.alive 
+      then (if live_count < 2 then false else true) 
+    
+    else (if live_count >= 3 then true else false)
 
 
 (* Evaluate the new state for every block in a given grid. *)
