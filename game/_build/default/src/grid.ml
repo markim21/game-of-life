@@ -9,10 +9,10 @@ let print_x_y x y =
   print_newline ()
 
 let make_new_matrix m n =
-  let array = Array.make m (Array.make n { x = 0; y = 0; alive = true }) in
+  let array = Array.make m (Array.make n { x = 0; y = 0; alive = false }) in
   for i = 0 to m - 1 do
     for j = 0 to n - 1 do
-      (Array.get array i).(j) <- { x = j; y = i; alive = true }
+      (Array.get array i).(j) <- { x = j; y = i; alive = false }
     done
   done;
   array
@@ -27,7 +27,7 @@ let change_grid grid m n =
 
 let draw_square y x square grid =
   draw_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5);
-  if square.alive then set_color white else set_color black;
+  if square.alive then set_color black else set_color white;
   fill_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5)
 
 let update_grid grid =
