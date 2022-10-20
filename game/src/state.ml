@@ -1,21 +1,20 @@
 open Array
 
 (* Define the components of a grid. *)
-module Grid = struct 
-  (* every cell stores its location and alive status. *)
-  type square = {
-    x : int;
-    y : int;
-    alive : bool;
-  }
+ 
+(* every cell stores its location and alive status. *)
+type square = {
+  x : int;
+  y : int;
+  alive : bool;
+}
 
   (* every grid has x by y dimensions and a 2D array of squares *)
-  type grid = {
-    x : int; 
-    y : int;
-    squares : square array array;
-  }
-end
+type grid = {
+  x : int; 
+  y : int;
+  squares : square array array;
+}
 
 
 (* Define the possible neighboring coordinates of a block 
@@ -41,7 +40,7 @@ let validate_boundary (max : int) (min : int) (value : int) =
 
 (*For a given block, return a list of the neighboring squares
    Filter invalid coordinates - ie if the block is a edge piece. *)
-let rec get_neighbor_coordinates (square : Grid.square) (g : Grid.grid) (coords : ((int -> int) * (int -> int)) list ) (neighbors: Grid.square list) : Grid.square list = 
+let rec get_neighbor_coordinates (square : square) (g : grid) (coords : ((int -> int) * (int -> int)) list ) (neighbors: square list) : square list = 
   (* iterate through every coordinate in coordinates list. *)
   match coords with 
   | [] -> neighbors 
@@ -56,11 +55,11 @@ let rec get_neighbor_coordinates (square : Grid.square) (g : Grid.grid) (coords 
 
 
 (* For a list of squares, count the number of neighbors alive tail recursively *)
-let rec count_living_tr (lst : Grid.square list) (count : int) : int = 
+let rec count_living_tr (lst : square list) (count : int) : int = 
   match lst with 
   | [] -> count
   | x :: t -> if x.alive then count_living_tr t (count+1) else count_living_tr t count
-let get_live_count (lst : Grid.square list) : int = 
+let get_live_count (lst : square list) : int = 
   count_living_tr lst 0
 
 
@@ -71,7 +70,7 @@ let get_live_count (lst : Grid.square list) : int =
       3. if square is alive --> <game of life rules>
       4. return new state as boolean  *)
 
-let get_next_square_state (square : Grid.square) (grid : Grid.grid) : bool = 
+let get_next_square_state (square : square) (grid : grid) : bool = 
   let live_count = 
     (get_neighbor_coordinates square grid coordinates []) |> get_live_count in 
 
@@ -81,7 +80,7 @@ let get_next_square_state (square : Grid.square) (grid : Grid.grid) : bool =
     else (if live_count >= 3 then true else false)
 
 
-let change_square_state (square: Grid.square) (grid : Grid.grid): Grid.square = 
+let change_square_state (square: square) (grid : grid) : square = 
   {
     x = square.x;
     y = square.y;
@@ -97,7 +96,7 @@ let twice_map f = Array.map( Array.map f )
     2. iterate through each square in the grid 
     2. evaluate each square. add to new grid 
 *)
-let get_new_grid (grid: Grid.grid) : Grid.grid = 
+let new_generation (grid: grid) : grid = 
   {
     x = grid.x;
     y = grid.y;
