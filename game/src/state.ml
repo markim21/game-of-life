@@ -1,5 +1,4 @@
 open Array
-open Graphics 
 
 (* Define the components of a grid. *)
 module Grid = struct 
@@ -19,9 +18,9 @@ module Grid = struct
 end
 
 
-(* Define the possible neighboring coordinates of a block *)
+(* Define the possible neighboring coordinates of a block 
 
-(* a = the current location. 
+  a = the current location. 
   if a__ is outside the grid bounds,
     then do not add that block to the list of neighbors.
   if a__ is inside the grid bounds, 
@@ -61,7 +60,6 @@ let rec count_living_tr (lst : Grid.square list) (count : int) : int =
   match lst with 
   | [] -> count
   | x :: t -> if x.alive then count_living_tr t (count+1) else count_living_tr t count
-
 let get_live_count (lst : Grid.square list) : int = 
   count_living_tr lst 0
 
@@ -73,15 +71,41 @@ let get_live_count (lst : Grid.square list) : int =
       3. if square is alive --> <game of life rules>
       4. return new state as boolean  *)
 
-let get_next_state (square : Grid.square) (grid : Grid.grid) : bool = 
+let get_next_square_state (square : Grid.square) (grid : Grid.grid) : bool = 
   let live_count = 
     (get_neighbor_coordinates square grid coordinates []) |> get_live_count in 
 
     if square.alive 
       then (if live_count < 2 then false else true) 
-    
+
     else (if live_count >= 3 then true else false)
 
 
-(* Evaluate the new state for every block in a given grid. *)
+let change_square_state (square: Grid.square) (grid : Grid.grid): Grid.square = 
+
+  let square : Grid.square = 
+  {
+    x = square.x;
+    y = square.y;
+    alive = get_next_square_state square grid } in square
+
+(* Helper function to map a function to every element of a list *)
+let twice_map f = Array.map( Array.map f )
+
+
+
+(* Evaluate the new state for every block in a given grid. 
+    1. create new grid with an empty array 
+    2. iterate through each square in the grid 
+    2. evaluate each square. add to new grid 
+    *)
+let get_new_game (grid: Grid.grid) : Grid.grid = 
+  twice_map (fun x -> change_square_state x grid ) grid.squares
+
+let get_next_game_state (grid : Grid.grid) : Grid.grid = 
+  let squares = grid.squares 
+   
+  
+  
+
 
