@@ -1,1 +1,1 @@
-src/grid.mli: Graphics
+src/grid.mli: Graphics State

@@ -1,14 +1,5 @@
 open Graphics
-
-type square =
-  | Alive
-  | Dead
-
-type grid = {
-  x : int;
-  y : int;
-  squares : square array array;
-}
+open State
 
 (** [print_x_y x y] prints 'x AND y'; for debugging math*)
 let print_x_y x y =
@@ -17,13 +8,17 @@ let print_x_y x y =
   print_int y;
   print_newline ()
 
-let make_grid m n =
-  { y = m; x = n; squares = Array.make m (Array.make n Alive) }
+let make_new_matrix m n =
+  let array = Array.make m (Array.make n { x = 0; y = 0; alive = true }) in
+  for i = 0 to m - 1 do
+    for j = 0 to n - 1 do
+      (Array.get array i).(j) <- { x = j; y = i; alive = true }
+    done
+  done;
+  array
 
-let flip_square s =
-  match s with
-  | Alive -> Dead
-  | Dead -> Alive
+let make_grid m n = { y = m; x = n; squares = make_new_matrix m n }
+let flip_square s = { s with alive = s.alive <> true }
 
 let change_grid grid m n =
   let array = Array.copy (Array.get grid.squares m) in
@@ -32,7 +27,7 @@ let change_grid grid m n =
 
 let draw_square y x square grid =
   draw_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5);
-  if square = Alive then set_color white else set_color black;
+  if square.alive then set_color white else set_color black;
   fill_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5)
 
 let update_grid grid =

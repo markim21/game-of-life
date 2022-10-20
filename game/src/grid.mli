@@ -1,7 +1,5 @@
 open Graphics
-
-type square
-type grid
+open State
 
 val make_grid : int -> int -> grid
 val draw_square : int -> int -> square -> grid -> unit
