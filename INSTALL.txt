@@ -1,0 +1,5 @@
+Commands to install necessary packages (may vary depending on terminal and OS)
+
+brew install pkg-config xquartz
+opam install graphics
+make code
