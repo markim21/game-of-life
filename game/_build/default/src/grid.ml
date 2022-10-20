@@ -10,6 +10,13 @@ type grid = {
   squares : square array array;
 }
 
+(** [print_x_y x y] prints 'x AND y'; for debugging math*)
+let print_x_y x y =
+  print_int x;
+  print_string " AND ";
+  print_int y;
+  print_newline ()
+
 let make_grid m n =
   { y = m; x = n; squares = Array.make m (Array.make n Alive) }
 
@@ -46,4 +53,19 @@ let init_grid grid =
   fill_rect 0 0 1000 1000;
   update_grid grid
 
-let click_square = None
+let click_square y x grid =
+  change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
+
+let rec listen_square grid =
+  loop_at_exit [ Button_down; Key_pressed ] (fun status ->
+      if button_down () then
+        let x, y = mouse_pos () in
+        if x < 1000 && y < 1000 then (
+          click_square y x grid;
+          update_grid grid;
+          listen_square grid)
+        else listen_square grid
+      else
+        match status.key with
+        | 'e' -> raise Exit
+        | _ -> listen_square grid)
