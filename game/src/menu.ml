@@ -6,35 +6,26 @@ let make_screen (width : int) (height : int) =
   set_window_title "Game of Life"
 
 let set_background_color (c : color) =
-  let current_color = foreground in
   set_color c;
-  fill_rect 0 0 (size_x ()) (size_y ());
-  set_color current_color
+  fill_rect 0 0 (size_x ()) (size_y ())
 
-let rect_block (c : color) w h x y =
-  let current_color = foreground in
+let rect_block (c : color) x y w h =
   set_color c;
-  fill_rect w h x y;
-  set_color current_color
+  fill_rect x y w h
 
-let rect_outline (c : color) w h x y =
-  let current_color = foreground in
+let rect_outline (c : color) x y w h =
   set_color c;
-  draw_rect w h x y;
-  set_color current_color
+  draw_rect x y w h
 
 let write_word (c : color) size x y word =
-  let current_color = foreground in
   moveto x y;
   set_color c;
-  set_font
-    ("-*-fixed-medium-r-semicondensed--" ^ string_of_int size
-   ^ "-*-*-*-*-*-iso8859-1");
-  draw_string word;
-  set_color current_color
+  set_font ("-*-*-medium-r-*--" ^ string_of_int size ^ "-*-*-*-*-*-iso8859-*");
+  draw_string word
 
-let start_menu =
-  make_screen 1000 1000;
+let start_menu = make_screen 1000 1000
+
+let menu_draw =
   set_background_color white;
   write_word black 50 360 700 "Game of Life";
   write_word black 40 250 620 "Start by Choosing Your Grid";
@@ -55,6 +46,18 @@ let start_menu =
   write_word black 50 620 395 "50 x 50";
 
   rect_outline black 580 290 250 60;
-  write_word black 50 600 295 "100 x 100";
+  write_word black 50 600 295 "100 x 100"
 
-  Unix.sleep 100
+let rec listen_menu () =
+  let status = wait_next_event [ Button_down ] in
+  let x = status.mouse_x in
+  let y = status.mouse_y in
+  if x <= 430 && x >= 180 && y <= 550 && y >= 490 then 3
+  else if x <= 430 && x >= 180 && y <= 450 && y >= 390 then 5
+  else if x <= 430 && x >= 180 && y <= 350 && y >= 290 then 10
+  else if x <= 870 && x >= 580 && y <= 550 && y >= 490 then 20
+  else if x <= 870 && x >= 580 && y <= 450 && y >= 390 then 50
+  else if x <= 870 && x >= 580 && y <= 350 && y >= 290 then 100
+  else listen_menu ()
+
+let square_num = listen_menu ()
