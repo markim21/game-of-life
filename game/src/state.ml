@@ -50,12 +50,11 @@ let rec get_neighbor_coordinates (square : square) (g : grid)
   match coords with
   | [] -> neighbors
   | (x, y) :: t ->
-      (* define x y = coordinates of the potential neighbor square we're
-         checking *)
+      (* define x y = coordinates of the potential neighbor square we're checking *)
       let x = x square.x in
       let y = y square.y in
 
-      if validate_boundary 0 g.x x && validate_boundary 0 g.y y then
+      if validate_boundary g.x 0 x && validate_boundary g.y 0 y then
         get_neighbor_coordinates square g t (g.squares.(x).(y) :: neighbors)
       else get_neighbor_coordinates square g t neighbors
 
