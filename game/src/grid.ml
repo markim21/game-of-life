@@ -9,11 +9,14 @@ let print_x_y x y =
   print_newline ()
 
 let make_new_matrix m n =
+  (* Probably somewhat inefficient*)
   let array = Array.make m (Array.make n { x = 0; y = 0; alive = false }) in
   for i = 0 to m - 1 do
+    let temp = Array.make n { x = 0; y = 0; alive = false } in
     for j = 0 to n - 1 do
-      (Array.get array i).(j) <- { x = j; y = i; alive = false }
-    done
+      temp.(j) <- { x = j; y = i; alive = false }
+    done;
+    array.(i) <- temp
   done;
   array
 
@@ -57,10 +60,25 @@ let rec listen_square grid =
         let x, y = mouse_pos () in
         if x < 1000 && y < 1000 then (
           click_square y x grid;
-          update_grid grid;
-          listen_square grid)
+          update_grid grid)
         else listen_square grid
       else
         match status.key with
-        | 'e' -> raise Exit
+        | ' ' -> step grid
         | _ -> listen_square grid)
+
+and step grid =
+  let new_grid = new_generation grid in
+  for i = 0 to grid.y - 1 do
+    let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
+    for j = 0 to grid.x - 1 do
+      temp.(j) <-
+        {
+          x = j;
+          y = i;
+          alive = (Array.get (Array.get new_grid.squares i) j).alive;
+        }
+    done;
+    grid.squares.(i) <- temp
+  done;
+  update_grid grid

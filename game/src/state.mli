@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-(** Updating a grid to produce new generations of grids *)
-
-=======
->>>>>>> 036927339218996f78dd2bafe930d96bbf583b5b
 open Array
 (** Updating a grid to produce new generations of grids *)
 

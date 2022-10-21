@@ -1,6 +1,5 @@
 open Array
 
-
 (* Define the components of a grid. *)
 
 (* every cell stores its location and alive status. *)
@@ -48,23 +47,6 @@ let rec get_neighbor_coordinates (square : square) (g : grid)
     (coords : ((int -> int) * (int -> int)) list) (neighbors : square list) :
     square list =
   (* iterate through every coordinate in coordinates list. *)
-<<<<<<< HEAD
-  match coords with 
-  | [] -> neighbors 
-  | (x,y) :: t -> 
-    (* define x y = coordinates of the potential neighbor square we're checking *)
-    let x = x square.x in let y = y square.y in 
-
-      if validate_boundary g.x 0 x && validate_boundary g.y 0 y
-        then get_neighbor_coordinates square g t (( g.squares.(x).(y) ) :: neighbors)
-        else get_neighbor_coordinates square g t (neighbors)
-
-
-
-(* For a list of squares, count the number of neighbors alive tail recursively *)
-let rec count_living_tr (lst : square list) (count : int) : int = 
-  match lst with 
-=======
   match coords with
   | [] -> neighbors
   | (x, y) :: t ->
@@ -81,7 +63,6 @@ let rec count_living_tr (lst : square list) (count : int) : int =
    recursively *)
 let rec count_living_tr (lst : square list) (count : int) : int =
   match lst with
->>>>>>> 036927339218996f78dd2bafe930d96bbf583b5b
   | [] -> count
   | x :: t ->
       if x.alive then count_living_tr t (count + 1) else count_living_tr t count
@@ -98,8 +79,8 @@ let get_next_square_state (square : square) (grid : grid) : bool =
     get_neighbor_coordinates square grid coordinates [] |> get_live_count
   in
 
-  if square.alive then if live_count < 2 then false else true
-  else if live_count >= 3 then true
+  if square.alive then if live_count < 2 || live_count > 3 then false else true
+  else if live_count = 3 then true
   else false
 
 let change_square_state (square : square) (grid : grid) : square =

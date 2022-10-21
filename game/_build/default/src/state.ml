@@ -79,8 +79,8 @@ let get_next_square_state (square : square) (grid : grid) : bool =
     get_neighbor_coordinates square grid coordinates [] |> get_live_count
   in
 
-  if square.alive then if live_count < 2 then false else true
-  else if live_count >= 3 then true
+  if square.alive then if live_count < 2 || live_count > 3 then false else true
+  else if live_count = 3 then true
   else false
 
 let change_square_state (square : square) (grid : grid) : square =
