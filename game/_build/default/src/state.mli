@@ -1,4 +1,3 @@
-open Array
 (** Updating a grid to produce new generations of grids *)
 
 type square = {

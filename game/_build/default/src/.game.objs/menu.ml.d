@@ -1,1 +1,1 @@
-src/menu.ml: Graphics Unix
+src/menu.ml: Graphics

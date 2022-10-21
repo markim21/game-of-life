@@ -1,1 +1,1 @@
-src/state.mli: Array
+src/state.mli:

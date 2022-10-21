@@ -32,14 +32,14 @@ let coordinates =
     (ap1, am1);
     (am1, amp);
     (ap1, amp);
-    (am1, ap1);
-    (amp, ap1);
+    (am1, am1);
+    (amp, am1);
     (ap1, ap1);
   ]
 
 (* helper function to test if coordinate is within grid dimensions *)
 let validate_boundary (max : int) (min : int) (value : int) =
-  value < max && value > min
+  value < max && value >= min
 
 (*For a given block, return a list of the neighboring squares Filter invalid
   coordinates - ie if the block is a edge piece. *)
@@ -50,12 +50,13 @@ let rec get_neighbor_coordinates (square : square) (g : grid)
   match coords with
   | [] -> neighbors
   | (x, y) :: t ->
-      (* define x y = coordinates of the potential neighbor square we're checking *)
+      (* define x y = coordinates of the potential neighbor square we're
+         checking *)
       let x = x square.x in
       let y = y square.y in
 
       if validate_boundary g.x 0 x && validate_boundary g.y 0 y then
-        get_neighbor_coordinates square g t (g.squares.(x).(y) :: neighbors)
+        get_neighbor_coordinates square g t (g.squares.(y).(x) :: neighbors)
       else get_neighbor_coordinates square g t neighbors
 
 (* For a list of squares, count the number of neighbors alive tail
