@@ -8,6 +8,10 @@ code:
 	code .
 	! dune build --watch
 
+zip:
+	rm -f game-of-life.zip
+	zip -r game-of-life.zip .
+
 utop:
 	OCAMLRUNPARAM=b dune utop src
 

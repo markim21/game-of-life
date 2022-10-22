@@ -20,7 +20,6 @@ let rect_outline (c : color) x y w h =
 let write_word (c : color) size x y word =
   moveto x y;
   set_color c;
-  set_font ("-*-*-medium-r-*--" ^ string_of_int size ^ "-*-*-*-*-*-iso8859-*");
   draw_string word
 
 let start_menu = make_screen 1000 1000
