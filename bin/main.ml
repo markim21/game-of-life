@@ -7,6 +7,7 @@ let () =
   let n = listen_menu () in
   let grid = make_grid n n in
   Graphics.close_graph ();
+
   init_grid grid;
   Unix.sleep 1;
-  listen_square grid
+  auto_listen_square false grid

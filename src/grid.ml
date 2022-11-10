@@ -54,6 +54,46 @@ let init_grid grid =
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 
+let step grid =
+  let new_grid = new_generation grid in
+    for i = 0 to grid.y - 1 do
+      let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
+      for j = 0 to grid.x - 1 do
+        temp.(j) <-
+          {
+            x = j;
+            y = i;
+            alive = (Array.get (Array.get new_grid.squares i) j).alive;
+          }
+      done;
+      grid.squares.(i) <- temp
+    done;
+    update_grid grid
+
+let rec auto_listen_square loop grid = 
+  loop_at_exit[Button_down; Key_pressed]
+  (fun status -> 
+    if button_down() && (loop = false) then 
+      (*add blocks to the grid if mouse position is in bound.
+        else, return to top*)
+      let x, y = mouse_pos () in 
+      if x < 1000 && y < 1000 then (
+        click_square y x grid;
+        update_grid grid)
+      else auto_listen_square false grid
+    else 
+      (*if looping, generate new loop. 
+        if not looping, check for toggle key.*)
+      if loop then 
+        (step grid; 
+        Unix.sleep 5; 
+        auto_listen_square true grid;)
+      else match status.key with 
+      | ' ' -> step grid 
+      | _ -> auto_listen_square true grid 
+
+    )
+
 let rec listen_square grid =
   loop_at_exit [ Button_down; Key_pressed ] (fun status ->
       if button_down () then
@@ -66,19 +106,3 @@ let rec listen_square grid =
         match status.key with
         | ' ' -> step grid
         | _ -> listen_square grid)
-
-and step grid =
-  let new_grid = new_generation grid in
-  for i = 0 to grid.y - 1 do
-    let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
-    for j = 0 to grid.x - 1 do
-      temp.(j) <-
-        {
-          x = j;
-          y = i;
-          alive = (Array.get (Array.get new_grid.squares i) j).alive;
-        }
-    done;
-    grid.squares.(i) <- temp
-  done;
-  update_grid grid
