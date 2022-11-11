@@ -20,9 +20,11 @@ let rect_outline (c : color) x y w h =
 let write_word (c : color) size x y word =
   moveto x y;
   set_color c;
+  set_font ("-*-*-medium-r-*--" ^ string_of_int size ^ "-*-*-*-*-*-iso8859-*");
   draw_string word
 
 let start_menu = make_screen 1000 1000
+let rules_draw () = write_word black 50 360 700 "Rules"
 
 let menu_draw =
   set_background_color white;
@@ -45,7 +47,10 @@ let menu_draw =
   write_word black 50 620 395 "50 x 50";
 
   rect_outline black 580 290 250 60;
-  write_word black 50 600 295 "100 x 100"
+  write_word black 50 600 295 "100 x 100";
+
+  rect_outline black 410 150 200 60;
+  write_word black 50 450 160 "Rules"
 
 let rec listen_menu () =
   let status = wait_next_event [ Button_down ] in
@@ -57,6 +62,7 @@ let rec listen_menu () =
   else if x <= 870 && x >= 580 && y <= 550 && y >= 490 then 20
   else if x <= 870 && x >= 580 && y <= 450 && y >= 390 then 50
   else if x <= 870 && x >= 580 && y <= 350 && y >= 290 then 100
+  else if x <= 610 && x >= 410 && y <= 210 && y >= 150 then 1
   else listen_menu ()
 
 let square_num = listen_menu ()
