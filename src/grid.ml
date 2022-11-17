@@ -70,31 +70,40 @@ let step grid =
     done;
     update_grid grid
 
-let rec auto_listen_square loop grid = 
-  loop_at_exit[Button_down; Key_pressed]
-  (fun status -> 
-    if button_down() && (loop = false) then 
-      (*add blocks to the grid if mouse position is in bound.
-        else, return to top*)
-      let x, y = mouse_pos () in 
-      if x < 1000 && y < 1000 then (
-        click_square y x grid;
-        update_grid grid)
-      else auto_listen_square false grid
-    else 
-      (*if looping, generate new loop. 
-        if not looping, check for toggle key.*)
-      if loop then 
-        (step grid; 
-        Unix.sleep 5; 
-        auto_listen_square true grid;)
-      else match status.key with 
-      | ' ' -> step grid 
-      | _ -> auto_listen_square true grid 
+(* 
+  if button_down, then click and update grid. 
+  else, 
+   if status.key = ' ' , then toggle loop. 
+   if status.key = '+' then increase step speed. 
+   if status.key = '-' then decrease step speed. otherwise, 
+    if [loop] is true, then step grid 
+    if [loop] is false, listen_square grid *)
 
+let validate_coords x y = 
+  if (x < 1000 && y < 1000) then true else false 
+
+let click_action x y grid = 
+  click_square y x grid;
+  update_grid grid
+
+let toggle_loop loop = 
+  if loop then false else true 
+
+let rec auto_listen_square loop grid = 
+  loop_at_exit[Button_down; Key_pressed] 
+  (fun status -> 
+    if button_down () then 
+      let x, y = mouse_pos () in 
+        if validate_coords x y then click_action x y grid 
+        else auto_listen_square loop grid 
+    else 
+      match status.key with 
+      |' ' -> auto_listen_square (toggle_loop loop) grid
+      | _ -> 
+        if loop then step grid else auto_listen_square loop grid 
     )
 
-let rec listen_square grid =
+(*let rec listen_square grid =
   loop_at_exit [ Button_down; Key_pressed ] (fun status ->
       if button_down () then
         let x, y = mouse_pos () in
@@ -105,4 +114,4 @@ let rec listen_square grid =
       else
         match status.key with
         | ' ' -> step grid
-        | _ -> listen_square grid)
+        | _ -> listen_square grid)*)

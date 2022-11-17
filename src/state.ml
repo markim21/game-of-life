@@ -89,9 +89,10 @@ let change_square_state (square : square) (grid : grid) : square =
 (* Helper function to map a function to every element of a list *)
 let twice_map f = Array.map (Array.map f)
 
-(* Evaluate the new state for every block in a given grid. 1. create new grid
-   with an empty array 2. iterate through each square in the grid 2. evaluate
-   each square. add to new grid *)
+(* Evaluate the new state for every block in a given grid. 
+    1. create new grid with an empty array 
+    2. iterate through each square in the grid 
+    3. evaluate each square. add to new grid *)
 let new_generation (grid : grid) : grid =
   {
     x = grid.x;

@@ -1,4 +1,6 @@
 (library
  (name game)
  (public_name Game)
- (libraries unix graphics))
+ (libraries unix graphics)
+ (instrumentation
+  (backend bisect_ppx)))

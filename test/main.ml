@@ -10,7 +10,7 @@ let grid_A = {
   x = 3;
   y = 3;
   squares : square array array = [|
-    [|{x=0;y=0;alive=false}; {x=1;y=0;alive=false}; {x=2;y=0;alive=false}; |];
+    [|{x=0;y=0;alive=false}; {x=1;y=0;alive=false}; {x=2;y=0;alive=false};|];
     [|{x=0;y=1;alive=false}; {x=1;y=1;alive=true}; {x=2;y=1;alive=false};|];
     [|{x=0;y=2;alive=false}; {x=1;y=2;alive=false}; {x=2;y=2;alive=false};|];
   |]
@@ -26,6 +26,19 @@ let grid_B = {
   |]
 }  
 
+let grid_c = {
+  x = 3;
+  y = 3;
+  squares : square array array = [|
+    [|{x=0;y=0;alive=true}; {x=1;y=0;alive=false}; {x=2;y=0;alive=false}; |];
+    [|{x=0;y=1;alive=false}; {x=1;y=1;alive=true}; {x=2;y=1;alive=false};|];
+    [|{x=0;y=2;alive=false}; {x=1;y=2;alive=false}; {x=2;y=2;alive=true};|];
+  |]
+}  
+
+
+(** TEST STATE.ML **)
+
 let next_generation_test (name:string) (init_grid: grid) (next_grid:grid) : test = 
   name >:: fun _ -> 
     assert_equal next_grid (new_generation init_grid)
@@ -40,8 +53,19 @@ let state_tests = [
       "a 3x3 grid with [0,0] [1,1] [2,2] alive results in only [1,1] alive"
       grid_B
       grid_A;
-
 ]
 
-let tests = "test suite" >::: List.flatten [state_tests]
+(** TEST GRID.ML **)
+let toggle_loop_test (name:string) (expected:bool) (start:bool) : test = 
+  name >:: fun _ -> 
+    assert_equal expected (toggle_loop start)
+
+let grid_tests = [
+    toggle_loop_test 
+    "test helper function"
+    false 
+    true 
+]
+
+let tests = "test suite" >::: List.flatten [state_tests; grid_tests]
 let _ = run_test_tt_main tests
