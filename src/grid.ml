@@ -103,6 +103,8 @@ let rec auto_listen_square loop grid =
         if loop then step grid else auto_listen_square loop grid 
     )
 
+(* click square *)
+
 (*let rec listen_square grid =
   loop_at_exit [ Button_down; Key_pressed ] (fun status ->
       if button_down () then
