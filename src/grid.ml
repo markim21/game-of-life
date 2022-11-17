@@ -56,64 +56,51 @@ let click_square y x grid =
 
 let step grid =
   let new_grid = new_generation grid in
-    for i = 0 to grid.y - 1 do
-      let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
-      for j = 0 to grid.x - 1 do
-        temp.(j) <-
-          {
-            x = j;
-            y = i;
-            alive = (Array.get (Array.get new_grid.squares i) j).alive;
-          }
-      done;
-      grid.squares.(i) <- temp
+  for i = 0 to grid.y - 1 do
+    let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
+    for j = 0 to grid.x - 1 do
+      temp.(j) <-
+        {
+          x = j;
+          y = i;
+          alive = (Array.get (Array.get new_grid.squares i) j).alive;
+        }
     done;
-    update_grid grid
+    grid.squares.(i) <- temp
+  done;
+  update_grid grid
 
-(* 
-  if button_down, then click and update grid. 
-  else, 
-   if status.key = ' ' , then toggle loop. 
-   if status.key = '+' then increase step speed. 
-   if status.key = '-' then decrease step speed. otherwise, 
-    if [loop] is true, then step grid 
-    if [loop] is false, listen_square grid *)
+(* if button_down, then click and update grid. else, if status.key = ' ' , then
+   toggle loop. if status.key = '+' then increase step speed. if status.key =
+   '-' then decrease step speed. otherwise, if [loop] is true, then step grid if
+   [loop] is false, listen_square grid *)
 
-let validate_coords x y = 
-  if (x < 1000 && y < 1000) then true else false 
+let validate_coords x y = if x < 1000 && y < 1000 then true else false
 
-let click_action x y grid = 
+let click_action x y grid =
   click_square y x grid;
   update_grid grid
 
-let toggle_loop loop = 
-  if loop then false else true 
+let toggle_loop loop = if loop then false else true
 
-let rec auto_listen_square loop grid = 
-  loop_at_exit[Button_down; Key_pressed] 
-  (fun status -> 
-    if button_down () then 
-      let x, y = mouse_pos () in 
-        if validate_coords x y then click_action x y grid 
-        else auto_listen_square loop grid 
-    else 
-      match status.key with 
-      |' ' -> auto_listen_square (toggle_loop loop) grid
-      | _ -> 
-        if loop then step grid else auto_listen_square loop grid 
-    )
+(*let rec auto_listen_square loop grid = loop_at_exit [ Button_down; Key_pressed
+  ] (fun status -> if button_down () && loop = false then let x, y = mouse_pos
+  () in if validate_coords x y then click_action x y grid else
+  auto_listen_square loop grid else match status.key with | ' ' ->
+  auto_listen_square (toggle_loop loop) grid | _ -> if loop then ( step grid;
+  auto_listen_square loop grid) else auto_listen_square loop grid)*)
 
 (* click square *)
 
-(*let rec listen_square grid =
+let rec auto_listen_square loop grid =
   loop_at_exit [ Button_down; Key_pressed ] (fun status ->
-      if button_down () then
+      if button_down () && loop = false then
         let x, y = mouse_pos () in
         if x < 1000 && y < 1000 then (
           click_square y x grid;
           update_grid grid)
-        else listen_square grid
+        else auto_listen_square loop grid
       else
         match status.key with
-        | ' ' -> step grid
-        | _ -> listen_square grid)*)
+        | 'a' -> step grid
+        | _ -> auto_listen_square loop grid)
