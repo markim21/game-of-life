@@ -23,10 +23,9 @@ let write_word (c : color) size x y word =
   set_font ("-*-*-medium-r-*--" ^ string_of_int size ^ "-*-*-*-*-*-iso8859-*");
   draw_string word
 
-let start_menu = make_screen 1000 1000
-let rules_draw () = write_word black 50 360 700 "Rules"
+let start_menu () = make_screen 1000 1000
 
-let menu_draw =
+and menu_draw () =
   set_background_color white;
   write_word black 50 360 700 "Game of Life";
   write_word black 40 250 620 "Start by Choosing Your Grid";
@@ -65,4 +64,25 @@ let rec listen_menu () =
   else if x <= 610 && x >= 410 && y <= 210 && y >= 150 then 1
   else listen_menu ()
 
-let square_num = listen_menu ()
+let square_num () = listen_menu ()
+
+let rec menu_rules_switch () =
+  let status = wait_next_event [ Key_pressed ] in
+  if status.key == 'e' then exit 0
+  else if status.key == ' ' then menu_draw ()
+  else menu_rules_switch ()
+
+let rules_draw () =
+  clear_graph ();
+  write_word black 50 450 700 "Rules";
+  write_word black 30 75 620
+    "1. Any live cell with two or three live neighbours survives.";
+  write_word black 30 75 540
+    "2. Any dead cell with three live neighbours becomes a live cell.";
+  write_word black 30 75 460
+    "3. All other live cells die in the next generation.";
+  write_word black 30 75 380
+    "4. All other dead cells stay dead in the next generation.";
+  write_word red 40 260 280 "Press 'e' to exit the game";
+  write_word red 40 120 200 "Press 'space' to go back to the main menu";
+  menu_rules_switch ()
