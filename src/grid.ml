@@ -90,17 +90,35 @@ let toggle_loop loop = if loop then false else true
   auto_listen_square (toggle_loop loop) grid | _ -> if loop then ( step grid;
   auto_listen_square loop grid) else auto_listen_square loop grid)*)
 
-(* click square *)
+(* click square -> change grid -> flip squares 
+   update_grid -> draw square  *)
 
-let rec auto_listen_square loop grid =
-  loop_at_exit [ Button_down; Key_pressed ] (fun status ->
-      if button_down () && loop = false then
-        let x, y = mouse_pos () in
-        if x < 1000 && y < 1000 then (
-          click_square y x grid;
-          update_grid grid)
-        else auto_listen_square loop grid
-      else
-        match status.key with
-        | 'a' -> step grid
-        | _ -> auto_listen_square loop grid)
+(* step grid -> (new_generation) -> update_grid *)
+
+let rec loop_step grid = 
+  loop_at_exit [ Key_pressed ] (fun status -> 
+    match status.key with 
+    |'_' -> raise Exit 
+    | _ -> Unix.sleep 1; step grid; loop_step grid
+)
+
+let rec listen_square grid = 
+  let status = wait_next_event [ Button_down; Key_pressed ] in 
+
+  if button_down () then 
+
+    let x = status.mouse_x in 
+    let y = status.mouse_y in 
+
+    if x < 1000 && y < 1000 then (
+      click_square y x grid;
+      update_grid grid;
+      listen_square grid)
+
+    else listen_square grid
+  
+  else 
+    match status.key with
+    | '_' -> loop_step grid 
+    | _ -> listen_square grid 
+
