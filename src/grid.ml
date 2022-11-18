@@ -28,11 +28,13 @@ let change_grid grid m n =
   array.(n) <- flip_square (Array.get (Array.get grid.squares m) n);
   grid.squares.(m) <- array
 
+(* Given coordinates, a square, and grid, draw the square alive or dead.*)
 let draw_square y x square grid =
   draw_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5);
   if square.alive then set_color black else set_color white;
   fill_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5)
 
+(*Given a grid, draw all the squares of a grid to screen*)
 let update_grid grid =
   for i = 0 to grid.y - 1 do
     for j = 0 to grid.x - 1 do
@@ -44,6 +46,7 @@ let update_grid grid =
     done
   done
 
+(*Start the game page*)
 let init_grid grid =
   open_graph " 1000x1000";
   set_window_title "Game of Life";
@@ -54,20 +57,9 @@ let init_grid grid =
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 
-let rec listen_square grid =
-  loop_at_exit [ Button_down; Key_pressed ] (fun status ->
-      if button_down () then
-        let x, y = mouse_pos () in
-        if x < 1000 && y < 1000 then (
-          click_square y x grid;
-          update_grid grid)
-        else listen_square grid
-      else
-        match status.key with
-        | ' ' -> step grid
-        | _ -> listen_square grid)
-
-and step grid =
+(*Given a grid, get the next generation of squares and 
+  create a new grid from that as a base. update grid *)
+(*let step grid =
   let new_grid = new_generation grid in
   for i = 0 to grid.y - 1 do
     let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
@@ -81,4 +73,49 @@ and step grid =
     done;
     grid.squares.(i) <- temp
   done;
+  update_grid grid*)
+
+(* if button_down, then click and update grid. else, if status.key = ' ' , then
+   toggle loop. if status.key = '+' then increase step speed. if status.key =
+   '-' then decrease step speed. otherwise, if [loop] is true, then step grid if
+   [loop] is false, listen_square grid *)
+
+let validate_coords x y = if x < 1000 && y < 1000 then true else false
+
+let click_action x y grid =
+  click_square y x grid;
   update_grid grid
+
+(*let rec auto_listen_square loop grid = loop_at_exit [ Button_down; Key_pressed
+  ] (fun status -> if button_down () && loop = false then let x, y = mouse_pos
+  () in if validate_coords x y then click_action x y grid else
+  auto_listen_square loop grid else match status.key with | ' ' ->
+  auto_listen_square (toggle_loop loop) grid | _ -> if loop then ( step grid;
+  auto_listen_square loop grid) else auto_listen_square loop grid)*)
+
+(* click square -> change grid -> flip squares 
+   update_grid -> draw square  *)
+
+(* step grid -> (new_generation) -> update_grid *)
+
+(* Update grid of squares based on user's mouse click. *)
+let rec listen_square grid = 
+  let status = wait_next_event [ Button_down; Key_pressed ] in 
+
+  if button_down () then 
+
+    let x = status.mouse_x in 
+    let y = status.mouse_y in 
+
+    if x < 1000 && y < 1000 then (
+      click_square y x grid;
+      update_grid grid;
+      listen_square grid)
+
+    else listen_square grid
+  
+  else 
+    match status.key with
+    | 'a' -> grid
+    | _ -> listen_square grid 
+
