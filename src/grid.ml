@@ -28,11 +28,13 @@ let change_grid grid m n =
   array.(n) <- flip_square (Array.get (Array.get grid.squares m) n);
   grid.squares.(m) <- array
 
+(* Given coordinates, a square, and grid, draw the square alive or dead.*)
 let draw_square y x square grid =
   draw_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5);
   if square.alive then set_color black else set_color white;
   fill_rect (x + 5) (y + 5) ((1000 / grid.y) - 5) ((1000 / grid.x) - 5)
 
+(*Given a grid, draw all the squares of a grid to screen*)
 let update_grid grid =
   for i = 0 to grid.y - 1 do
     for j = 0 to grid.x - 1 do
@@ -44,6 +46,7 @@ let update_grid grid =
     done
   done
 
+(*Start the game page*)
 let init_grid grid =
   open_graph " 1000x1000";
   set_window_title "Game of Life";
@@ -54,6 +57,8 @@ let init_grid grid =
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 
+(*Given a grid, get the next generation of squares and 
+  create a new grid from that as a base. update grid *)
 let step grid =
   let new_grid = new_generation grid in
   for i = 0 to grid.y - 1 do
@@ -98,10 +103,11 @@ let toggle_loop loop = if loop then false else true
 let rec loop_step grid = 
   loop_at_exit [ Key_pressed ] (fun status -> 
     match status.key with 
-    |'_' -> raise Exit 
+    |'_' -> print_string "help"; raise Exit 
     | _ -> Unix.sleep 1; step grid; loop_step grid
 )
 
+(* Update grid of squares based on user's mouse click. *)
 let rec listen_square grid = 
   let status = wait_next_event [ Button_down; Key_pressed ] in 
 
@@ -119,6 +125,6 @@ let rec listen_square grid =
   
   else 
     match status.key with
-    | '_' -> loop_step grid 
+    | 'a' -> grid
     | _ -> listen_square grid 
 
