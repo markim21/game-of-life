@@ -20,7 +20,11 @@ let step grid =
 
 let loop_generations grid = 
   loop_at_exit [ Key_pressed ] (fun status -> 
-    match status.key with 
-    | ' ' -> raise Exit 
-    | _ -> Unix.sleep 1; step grid)
+    if key_pressed () then 
+      match status.key with 
+      | ' ' -> raise Exit 
+      | _ -> step grid
+    else 
+      step grid )
+
 
