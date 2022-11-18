@@ -12,8 +12,8 @@ let () =
   Unix.sleep 1;
   let start_grid = listen_square grid in 
   Graphics.close_graph ();
-  print_string "success";
   init_grid start_grid;
+  Unix.sleep 1;
   loop_generations start_grid
 
 

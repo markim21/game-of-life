@@ -110,8 +110,6 @@ let state_tests =
   ]
 
 (** TEST GRID.ML **)
-let toggle_loop_test (name : string) (expected : bool) (start : bool) : test =
-  name >:: fun _ -> assert_equal expected (toggle_loop start)
 
 (* [click_square >> (change_grid) >> update_grid] *)
 
@@ -122,6 +120,6 @@ let toggle_loop_test (name : string) (expected : bool) (start : bool) : test =
 
 (* *)
 
-let grid_tests = [ toggle_loop_test "test helper function" false true ]
+let grid_tests = [  ]
 let tests = "test suite" >::: List.flatten [ state_tests; grid_tests ]
 let _ = run_test_tt_main tests

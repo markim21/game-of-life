@@ -7,4 +7,3 @@ val init_grid : grid -> unit
 val update_grid : grid -> unit
 val change_grid : grid -> int -> int -> unit
 val listen_square : grid -> grid 
-val toggle_loop : bool -> bool

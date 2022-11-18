@@ -59,7 +59,7 @@ let click_square y x grid =
 
 (*Given a grid, get the next generation of squares and 
   create a new grid from that as a base. update grid *)
-let step grid =
+(*let step grid =
   let new_grid = new_generation grid in
   for i = 0 to grid.y - 1 do
     let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
@@ -73,7 +73,7 @@ let step grid =
     done;
     grid.squares.(i) <- temp
   done;
-  update_grid grid
+  update_grid grid*)
 
 (* if button_down, then click and update grid. else, if status.key = ' ' , then
    toggle loop. if status.key = '+' then increase step speed. if status.key =
@@ -86,8 +86,6 @@ let click_action x y grid =
   click_square y x grid;
   update_grid grid
 
-let toggle_loop loop = if loop then false else true
-
 (*let rec auto_listen_square loop grid = loop_at_exit [ Button_down; Key_pressed
   ] (fun status -> if button_down () && loop = false then let x, y = mouse_pos
   () in if validate_coords x y then click_action x y grid else
@@ -99,13 +97,6 @@ let toggle_loop loop = if loop then false else true
    update_grid -> draw square  *)
 
 (* step grid -> (new_generation) -> update_grid *)
-
-let rec loop_step grid = 
-  loop_at_exit [ Key_pressed ] (fun status -> 
-    match status.key with 
-    |'_' -> print_string "help"; raise Exit 
-    | _ -> Unix.sleep 1; step grid; loop_step grid
-)
 
 (* Update grid of squares based on user's mouse click. *)
 let rec listen_square grid = 
