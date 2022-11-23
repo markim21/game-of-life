@@ -29,7 +29,8 @@ let start_menu () = make_screen 1000 1000
 let menu_draw () =
   set_background_color white;
   write_word black 50 360 700 "Game of Life";
-  write_word black 40 250 620 "Start by Choosing Your Grid";
+  write_word black 40 250 630 "Start by Choosing Your Grid";
+  write_word black 30 320 580 "Press 'e' to exit the game";
 
   rect_outline black 180 490 250 60 1;
   write_word black 50 245 495 "3 x 3";
@@ -55,19 +56,129 @@ let menu_draw () =
   rect_outline black 385 100 250 60 1;
   write_word black 50 415 105 "Patterns"
 
+let ocaml =
+  [|
+    (0, 600);
+    (27, 622);
+    (56, 653);
+    (85, 706);
+    (99, 743);
+    (114, 765);
+    (135, 784);
+    (160, 797);
+    (184, 800);
+    (214, 792);
+    (233, 774);
+    (248, 748);
+    (260, 720);
+    (272, 690);
+    (283, 656);
+    (303, 627);
+    (326, 639);
+    (338, 677);
+    (347, 725);
+    (352, 763);
+    (375, 797);
+    (400, 800);
+    (427, 791);
+    (448, 769);
+    (468, 742);
+    (482, 713);
+    (500, 676);
+    (512, 648);
+    (522, 615);
+    (540, 581);
+    (568, 559);
+    (603, 532);
+    (640, 517);
+    (679, 513);
+    (708, 559);
+    (716, 619);
+    (719, 668);
+    (735, 693);
+    (756, 714);
+    (774, 729);
+    (808, 729);
+    (839, 736);
+    (852, 717);
+    (885, 708);
+    (918, 708);
+    (950, 699);
+    (978, 671);
+    (987, 638);
+    (986, 613);
+    (967, 592);
+    (937, 602);
+    (886, 590);
+    (849, 596);
+    (825, 582);
+    (814, 532);
+    (811, 483);
+    (808, 438);
+    (800, 400);
+    (784, 369);
+    (754, 350);
+    (713, 331);
+    (670, 324);
+    (629, 319);
+    (586, 316);
+    (555, 314);
+    (552, 272);
+    (549, 232);
+    (552, 196);
+    (561, 146);
+    (550, 115);
+    (550, 79);
+    (556, 29);
+    (562, 0);
+    (521, 0);
+    (521, 15);
+    (513, 54);
+    (500, 100);
+    (507, 139);
+    (506, 169);
+    (496, 223);
+    (470, 276);
+    (427, 311);
+    (384, 300);
+    (358, 269);
+    (332, 232);
+    (321, 205);
+    (302, 177);
+    (287, 131);
+    (264, 95);
+    (250, 39);
+    (247, 0);
+    (219, 0);
+    (221, 35);
+    (221, 82);
+    (229, 115);
+    (238, 140);
+    (267, 184);
+    (280, 227);
+    (296, 260);
+    (316, 291);
+    (248, 292);
+    (194, 315);
+    (134, 339);
+    (80, 385);
+    (54, 370);
+    (47, 323);
+    (33, 283);
+    (0, 240);
+  |]
+
 let pretty () =
-  let dark_grey = rgb 190 190 190 in
-  (*glider*)
-  rect_block yellow 10 600 100 100;
-  rect_outline dark_grey 10 600 100 100 3;
-  rect_block yellow 210 600 100 100;
-  rect_outline dark_grey 210 600 100 100 3;
-  rect_block yellow 210 700 100 100;
-  rect_outline dark_grey 210 700 100 100 3;
-  rect_block yellow 210 500 100 100;
-  rect_outline dark_grey 210 500 100 100 3;
-  rect_block yellow 110 500 100 100;
-  rect_outline dark_grey 110 500 100 100 3
+  let orange = rgb 232 126 6 in
+  let orange2 = rgb 239 122 11 in
+  let orange3 = rgb 237 113 14 in
+  let orange4 = rgb 236 107 18 in
+  rect_block orange 0 0 1000 1000;
+  rect_block orange2 0 0 1000 500;
+  rect_block orange3 0 0 1000 250;
+  rect_block orange4 0 0 1000 150;
+  set_color white;
+  fill_poly ocaml
 
 let rec listen_menu () =
   let status = wait_next_event [ Button_down; Key_pressed ] in
@@ -91,15 +202,17 @@ let rec listen_menu () =
         clear_graph ();
         menu_draw ();
         0
+    | 'e' -> exit 0
     | _ -> listen_menu ()
 
 let square_num () = listen_menu ()
 
 let rec menu_switch () =
   let status = wait_next_event [ Key_pressed ] in
-  if status.key == 'e' then exit 0
-  else if status.key == ' ' then menu_draw ()
-  else menu_switch ()
+  match status.key with
+  | 'e' -> exit 0
+  | ' ' -> menu_draw ()
+  | _ -> menu_switch ()
 
 let rules_draw () =
   clear_graph ();
