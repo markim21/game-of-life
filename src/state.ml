@@ -43,9 +43,7 @@ let validate_boundary (max : int) (min : int) (value : int) =
 
 (*For a given block, return a list of the neighboring squares Filter invalid
   coordinates - ie if the block is a edge piece. *)
-let rec get_neighbor_coordinates (square : square) (g : grid)
-    (coords : ((int -> int) * (int -> int)) list) (neighbors : square list) :
-    square list =
+let rec get_neighbor_coordinates (square : square) (g : grid) (coords : ((int -> int) * (int -> int)) list) (neighbors : square list) : square list =
   (* iterate through every coordinate in coordinates list. *)
   match coords with
   | [] -> neighbors

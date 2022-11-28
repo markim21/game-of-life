@@ -57,23 +57,6 @@ let init_grid grid =
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 
-(*Given a grid, get the next generation of squares and 
-  create a new grid from that as a base. update grid *)
-(*let step grid =
-  let new_grid = new_generation grid in
-  for i = 0 to grid.y - 1 do
-    let temp = Array.make grid.x { x = 0; y = 0; alive = false } in
-    for j = 0 to grid.x - 1 do
-      temp.(j) <-
-        {
-          x = j;
-          y = i;
-          alive = (Array.get (Array.get new_grid.squares i) j).alive;
-        }
-    done;
-    grid.squares.(i) <- temp
-  done;
-  update_grid grid*)
 
 (* if button_down, then click and update grid. else, if status.key = ' ' , then
    toggle loop. if status.key = '+' then increase step speed. if status.key =
@@ -86,17 +69,6 @@ let click_action x y grid =
   click_square y x grid;
   update_grid grid
 
-(*let rec auto_listen_square loop grid = loop_at_exit [ Button_down; Key_pressed
-  ] (fun status -> if button_down () && loop = false then let x, y = mouse_pos
-  () in if validate_coords x y then click_action x y grid else
-  auto_listen_square loop grid else match status.key with | ' ' ->
-  auto_listen_square (toggle_loop loop) grid | _ -> if loop then ( step grid;
-  auto_listen_square loop grid) else auto_listen_square loop grid)*)
-
-(* click square -> change grid -> flip squares 
-   update_grid -> draw square  *)
-
-(* step grid -> (new_generation) -> update_grid *)
 
 (* Update grid of squares based on user's mouse click. *)
 let rec listen_square grid = 
