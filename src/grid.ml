@@ -92,4 +92,9 @@ and listen_square grid =
     | '1' -> shape_action grid x y square_block
     | '2' -> shape_action grid x y right_glider
     | '3' -> shape_action grid x y left_glider
+    | '4' -> shape_action grid x y l_spaceship
+    | '5' -> shape_action grid x y penta
+    | '6' -> shape_action grid x y pulsar
+    | '7' -> shape_action grid x y stack
+    | '8' -> shape_action grid x y line
     | _ -> listen_square grid

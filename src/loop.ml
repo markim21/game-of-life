@@ -1,6 +1,6 @@
 open State
 open Graphics
-open Grid 
+open Grid
 
 let step grid =
   let new_grid = new_generation grid in
@@ -18,14 +18,11 @@ let step grid =
   done;
   update_grid grid
 
-let loop_generations grid = 
-  loop_at_exit [ Key_pressed ] (fun status -> 
-    Unix.sleep 1;
-    if key_pressed () then 
-      match status.key with 
-      | ' ' -> raise Exit 
-      | _ -> step grid
-    else 
-      step grid )
-
-
+let loop_generations grid =
+  loop_at_exit [ Key_pressed ] (fun status ->
+      Unix.sleepf 0.3;
+      if key_pressed () then
+        match status.key with
+        | ' ' -> raise Exit
+        | _ -> step grid
+      else step grid)
