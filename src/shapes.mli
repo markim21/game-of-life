@@ -11,3 +11,4 @@ val penta : shape
 val line : shape
 val stack : shape
 val pulsar : shape
+val gun : shape

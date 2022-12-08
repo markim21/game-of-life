@@ -96,3 +96,32 @@ let pulsar grid x y =
   stack grid (x - 1) (y - 4);
   stack grid (x + 6) (y - 4);
   stack grid (x - 6) (y - 4)
+
+(* Special *)
+(* Gosper Glider Gun *)
+let gun grid x y =
+  square_block grid x (y - 1);
+
+  stack grid (x + 10) (y - 2);
+  set_square grid (x + 11) (y - 3);
+  set_square grid (x + 11) (y + 1);
+  set_square grid (x + 12) (y - 4);
+  set_square grid (x + 13) (y - 4);
+  set_square grid (x + 12) (y + 2);
+  set_square grid (x + 13) (y + 2);
+  set_square grid (x + 14) (y - 1);
+  set_square grid (x + 15) (y - 3);
+  set_square grid (x + 15) (y + 1);
+  stack grid (x + 16) (y - 2);
+  set_square grid (x + 17) (y - 1);
+
+  stack grid (x + 20) y;
+  stack grid (x + 21) y;
+  set_square grid (x + 22) (y - 1);
+  set_square grid (x + 22) (y + 3);
+  set_square grid (x + 24) (y - 1);
+  set_square grid (x + 24) (y + 3);
+  set_square grid (x + 24) (y - 2);
+  set_square grid (x + 24) (y + 4);
+
+  square_block grid (x + 34) (y + 1)

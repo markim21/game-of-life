@@ -97,4 +97,5 @@ and listen_square grid =
     | '6' -> shape_action grid x y pulsar
     | '7' -> shape_action grid x y stack
     | '8' -> shape_action grid x y line
+    | '9' -> shape_action grid x y gun
     | _ -> listen_square grid
