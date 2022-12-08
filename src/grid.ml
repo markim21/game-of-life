@@ -1,5 +1,6 @@
 open Graphics
 open State
+open Shapes
 
 (** [print_x_y x y] prints 'x AND y'; for debugging math*)
 let print_x_y x y =
@@ -57,7 +58,6 @@ let init_grid grid =
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 
-
 (* if button_down, then click and update grid. else, if status.key = ' ' , then
    toggle loop. if status.key = '+' then increase step speed. if status.key =
    '-' then decrease step speed. otherwise, if [loop] is true, then step grid if
@@ -69,25 +69,23 @@ let click_action x y grid =
   click_square y x grid;
   update_grid grid
 
-
 (* Update grid of squares based on user's mouse click. *)
-let rec listen_square grid = 
-  let status = wait_next_event [ Button_down; Key_pressed ] in 
+let rec listen_square grid =
+  let status = wait_next_event [ Button_down; Key_pressed ] in
+  let x = status.mouse_x in
+  let y = status.mouse_y in
 
-  if button_down () then 
-
-    let x = status.mouse_x in 
-    let y = status.mouse_y in 
-
+  if button_down () then
     if x < 1000 && y < 1000 then (
       click_square y x grid;
       update_grid grid;
       listen_square grid)
-
     else listen_square grid
-  
-  else 
+  else
     match status.key with
     | 'a' -> grid
-    | _ -> listen_square grid 
-
+    | '1' ->
+        square_block grid (x * grid.x / 1000) (y * grid.y / 1000);
+        update_grid grid;
+        listen_square grid
+    | _ -> listen_square grid
