@@ -1,4 +1,8 @@
 open Graphics
 open State
 
-val square_block : grid -> int -> int -> unit
+type shape = grid -> int -> int -> unit
+
+val square_block : shape
+val right_glider : shape
+val left_glider : shape

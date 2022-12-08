@@ -69,8 +69,13 @@ let click_action x y grid =
   click_square y x grid;
   update_grid grid
 
+let rec shape_action grid x y shape =
+  shape grid (x * grid.x / 1000) (y * grid.y / 1000);
+  update_grid grid;
+  listen_square grid
+
 (* Update grid of squares based on user's mouse click. *)
-let rec listen_square grid =
+and listen_square grid =
   let status = wait_next_event [ Button_down; Key_pressed ] in
   let x = status.mouse_x in
   let y = status.mouse_y in
@@ -84,8 +89,7 @@ let rec listen_square grid =
   else
     match status.key with
     | 'a' -> grid
-    | '1' ->
-        square_block grid (x * grid.x / 1000) (y * grid.y / 1000);
-        update_grid grid;
-        listen_square grid
+    | '1' -> shape_action grid x y square_block
+    | '2' -> shape_action grid x y right_glider
+    | '3' -> shape_action grid x y left_glider
     | _ -> listen_square grid
