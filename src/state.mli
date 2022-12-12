@@ -25,3 +25,4 @@ val get_neighbor_coordinates : square -> grid -> ((int -> int) * (int -> int)) l
   coordinates - ie if the block is a edge piece. *)
 
 val get_live_count : square list -> int 
+(**[get_live_count lst] returns the live count of a list of squares*)
