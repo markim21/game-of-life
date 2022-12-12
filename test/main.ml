@@ -204,10 +204,10 @@ let grid_A =
 let grid_B =
   {
     x = 3;
-    y = 3;
+    y = 3; 
     squares : square array array =
       [|
-        [|
+        [| (* [(0,0); (1,1); (2,2)] *)
           { x = 0; y = 0; alive = true };
           { x = 1; y = 0; alive = false };
           { x = 2; y = 0; alive = false };
@@ -294,9 +294,10 @@ let next_generation_tests =
 
 (** BLACK BOX TESTING OF SHAPES.ML **************************************)
 (* create a fresh empty grid *)
-let fresh_grid = 
+let fresh_grid m n = 
   fun () -> 
-    make_grid 50 50 
+    make_grid m n 
+
 
 (*A square block is static, and remains the same no matter what*)
 let square_block g = square_block g 25 25; g
@@ -326,99 +327,97 @@ let shapes_oscillate_tests = [
   future_generations_test 
     "(left) gliders are p-4 oscillators that are offset diagonally by one cell"
     4
-    (left_glider (fresh_grid ()) 10 10)
-    (left_glider (fresh_grid ()) 9 9)
+    (left_glider (fresh_grid 50 50 ()) 10 10)
+    (left_glider (fresh_grid 50 50 ()) 9 9)
   ;
 
   future_generations_test 
     "(left) gliders are p-4 oscillators that are offset diagonally by one cell"
     12
-    (left_glider (fresh_grid ()) 10 10)
-    (left_glider (fresh_grid ()) 7 7)
+    (left_glider (fresh_grid 50 50 ()) 10 10)
+    (left_glider (fresh_grid 50 50 ()) 7 7)
   ;
 
   future_generations_test 
     "(right) gliders are p-4 oscillators that are offset diagonally by one cell"
     4 
-    (right_glider (fresh_grid ()) 10 10)
-    (right_glider (fresh_grid ()) 11 9)
+    (right_glider (fresh_grid 50 50 ()) 10 10)
+    (right_glider (fresh_grid 50 50 ()) 11 9)
   ;
 
   future_generations_test 
     "(right) gliders are p-4 oscillators that are offset diagonally by one cell"
     12
-    (right_glider (fresh_grid ()) 10 10)
-    (right_glider (fresh_grid ()) 13 7)
+    (right_glider (fresh_grid 50 50 ()) 10 10)
+    (right_glider (fresh_grid 50 50 ()) 13 7)
   ;
 
   future_generations_test
     "lines and stacks oscillate to each other every other generation"
     1
-    (line (fresh_grid ()))
-    (stack (fresh_grid ()));
+    (line (fresh_grid 50 50 ()))
+    (stack (fresh_grid 50 50 ()));
 
   future_generations_test
     "lines and stacks oscillate to each other at a speed of c/2"
     11
-    (line (fresh_grid ()))
-    (stack (fresh_grid ()));
+    (line (fresh_grid 50 50 ()))
+    (stack (fresh_grid 50 50 ()));
 
   future_generations_test 
     "lines are p-2 oscillators"
     50
-    (line (fresh_grid ()))
-    (line (fresh_grid ()));
+    (line (fresh_grid 50 50 ()))
+    (line (fresh_grid 50 50 ()));
   
   future_generations_test 
     "stacks are p-2 oscillators"
     50
-    (stack (fresh_grid ()))
-    (stack (fresh_grid ()));
+    (stack (fresh_grid 50 50 ()))
+    (stack (fresh_grid 50 50 ()));
 
   future_generations_test 
     "lines are p-2 oscillators"
     2
-    (line (fresh_grid ()))
-    (line (fresh_grid ()));
+    (line (fresh_grid 50 50 ()))
+    (line (fresh_grid 50 50 ()));
   
   future_generations_test 
     "stacks are p-2 oscillators"
     2
-    (stack (fresh_grid ()))
-    (stack (fresh_grid ()));
+    (stack (fresh_grid 50 50 ()))
+    (stack (fresh_grid 50 50 ()));
 
   future_generations_test 
      "square blocks are static" 
      50
-     (square_block (fresh_grid ()))
-     (square_block (fresh_grid ()));
+     (square_block (fresh_grid 50 50 ()))
+     (square_block (fresh_grid 50 50 ()));
 
   future_generations_test 
      "pulsars are p-3 oscillators"
      3
-     (pulsar (fresh_grid ()))
-     (pulsar (fresh_grid ()));
+     (pulsar (fresh_grid 50 50 ()))
+     (pulsar (fresh_grid 50 50 ()));
 
   future_generations_test 
     "pentas are p-15 oscillators"
     15
-    (penta (fresh_grid ()))
-    (penta (fresh_grid ()));
+    (penta (fresh_grid 50 50 ()))
+    (penta (fresh_grid 50 50 ()));
 
   future_generations_test 
      "pulsars are p-3 oscillators"
      33
-     (pulsar (fresh_grid ()))
-     (pulsar (fresh_grid ()));
+     (pulsar (fresh_grid 50 50 ()))
+     (pulsar (fresh_grid 50 50 ()));
 
   future_generations_test 
     "pentas are p-15 oscillators"
     60
-    (penta (fresh_grid ()))
-    (penta (fresh_grid ()))  
+    (penta (fresh_grid 50 50 ()))
+    (penta (fresh_grid 50 50 ()))  
 ]
-
-
 
 
 (** GLASS BOX TESTING OF STATE.ML *)
@@ -493,35 +492,35 @@ let shapes_live_tests = [
   grid_live_count_test
     "squares have 4 live squares"
     4
-    (square_block (fresh_grid ()));
+    (square_block (fresh_grid 50 50 ()));
   grid_live_count_test
     "right gliders have 5 live squares"
     5 
-    (right_glider (fresh_grid ()) 10 10);
+    (right_glider (fresh_grid 50 50 ()) 10 10);
   grid_live_count_test
     "left gliders have 5 live squares"
     5 
-    (left_glider (fresh_grid ()) 10 10);
+    (left_glider (fresh_grid 50 50 ()) 10 10);
   grid_live_count_test
     "pulsars have 48 live squares"
     48
-    (pulsar (fresh_grid ()));
+    (pulsar (fresh_grid 50 50 ()));
   grid_live_count_test
     "pentadecathlons have 12 live squares"
     12
-    (penta (fresh_grid ()));
+    (penta (fresh_grid 50 50 ()));
   grid_live_count_test
     "LWSS have 9 live squares"
     9
-    (l_spaceship (fresh_grid ()));
+    (l_spaceship (fresh_grid 50 50 ()));
   grid_live_count_test
     "lines have 3 live squares"
     3
-    (line (fresh_grid ()));
+    (line (fresh_grid 50 50 ()));
   grid_live_count_test 
     "stacks have 3 live squares"
     3
-    (stack (fresh_grid ()));
+    (stack (fresh_grid 50 50 ()));
 ]
 
 let neighbors_tests = [
@@ -539,22 +538,84 @@ let shapes_tests =
   shapes_oscillate_tests
   @ shapes_live_tests
 
-(** TEST GRID.ML **)
 
-(* [click_square >> (change_grid) >> update_grid] *)
+(** GLASS BOX TEST GRID.ML *********************************)
 
-(* clicking on [1,1] of a [3,3] grid with all dead cells turns [1,1] alive, and
-   vice versa*)
+let square_grid = 
+  {
+    x = 1;
+    y = 1;
+    squares : square array array = 
+    [| [| {x = 0; y = 0; alive = true}|] |]
+  }
 
-let click_square_test (name : string) (x : int) (y : int) (init_grid : grid) (final_grid : grid) : test =
+let dead_square_grid = 
+  {
+    x = 1;
+    y = 1;
+    squares : square array array = 
+    [| [| {x = 0; y = 0; alive = false}|] |]
+  }
+
+let rec generation_loop remaining_generations grid =
+    match remaining_generations with
+    | r when r <= 0 -> grid
+    | _ ->
+        let new_population = new_generation grid in
+        generation_loop (remaining_generations - 1) new_population
+  
+let get_changed_grid g x y = 
+  change_grid g x y; g 
+
+let rec click_loop click_lst grid = 
+  match click_lst with 
+  | [] -> grid 
+  | (x, y) :: t -> (click_loop t (get_changed_grid grid x y))
+
+(**[click_square_test] maintains that [final_grid] is equal to 
+    [final_grid] if you click [(x, y)...]*)
+let click_square_test (name : string) click_lst (init_grid : grid) (final_grid : grid) : test =
  name >:: fun _ -> assert_equal final_grid 
- (new_generation init_grid)
+ (click_loop click_lst init_grid)
+
+let click_tests = [
+  click_square_test 
+  "clicking a dead toggles its alive-ness"
+  [(0,0)]
+  (fresh_grid 1 1 ())
+  square_grid; 
+
+  click_square_test 
+  "clicking a live toggles its alive-ness"
+  [(0,0)]
+  square_grid
+  (fresh_grid 1 1 ()); 
+
+  click_square_test 
+  "clicking a live toggles its alive-ness"
+  [(0,0); (0,0)]
+  dead_square_grid
+  (fresh_grid 1 1 ()); 
+
+  click_square_test
+  "creating grid bread corner"
+  [(3,3);(4,3);(3,4);(4,4)]
+  (fresh_grid 5 5 ())
+  grid_bread_corner; 
+
+  click_square_test
+  "creating a diagonal line"
+  [(0,0); (1,1); (2,2)]
+  (fresh_grid 3 3())
+  grid_B
+]
 
 
-(* same as above, but alive to dead. *)
-
-(* *)
 
 let grid_tests = [  ]
-let tests = "test suite" >::: List.flatten [ state_tests; grid_tests; shapes_tests ]
+
+
+
+
+let tests = "test suite" >::: List.flatten [ state_tests; grid_tests; shapes_tests; click_tests]
 let _ = run_test_tt_main tests

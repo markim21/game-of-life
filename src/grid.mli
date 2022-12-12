@@ -19,6 +19,10 @@ val update_grid : grid -> unit
     when a square changes its alive status.*)
 val change_grid : grid -> int -> int -> unit
 
+(**[click_square y x grid] ensures the mouse coordinates [x] and [y] are 
+    within dimensions of the grid before it attempts to change_grid *)
+val click_square : int -> int -> grid -> unit 
+
 (*[listen_square grid] is the game loop that updates the game grid 
    based on user's mouse click.*)
 val listen_square : grid -> grid 
