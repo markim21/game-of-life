@@ -1,4 +1,5 @@
 open Graphics
+open Shapes
 open State
 
 (**[make_grid m n] creates a grid with dimensions [m] x [n]*)
@@ -21,3 +22,7 @@ val change_grid : grid -> int -> int -> unit
 (*[listen_square grid] is the game loop that updates the game grid 
    based on user's mouse click.*)
 val listen_square : grid -> grid 
+
+(**[shape_action grid x y shape] adds [shape] to [grid], updates [grid] and
+    the screen, and returns to the game loop.*)
+val shape_action : grid -> int -> int -> shape -> grid
