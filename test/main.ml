@@ -338,9 +338,15 @@ let future_generations_test (name : string) (generations : int) (init_grid : gri
   assert_equal final_grid
     (generation_loop generations init_grid)
 
+(**[random_black_test] generates a randomly sized grid, blacks out one, and proves that after 2 generations it will always be empty*)
 let random_black_test : test = 
-  let rg = random_grid in 
-  let bg = clear_grid rg true in 
+  let rand_dim = random_dimensions () in 
+  let new_grid = 
+  match rand_dim with 
+  | (x, y) -> fresh_grid x y () 
+  in 
+  let rg = clear_grid new_grid false in 
+  let bg = clear_grid new_grid true in 
   future_generations_test "after 2 generations, a fully alive grid becomes fully dead" 2 bg rg
 
 let random_empty_test : test = 
