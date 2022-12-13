@@ -621,10 +621,15 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
  name >:: fun _ -> assert_equal final_grid 
  (click_loop click_lst init_grid)
 
-let random_single_click : test = failwith "unimplemented"
+(**[random_single_click] generates a randomly placed click onto a randomly sized, empty grid. if the click is within bounds,
+    then the number of lives will be one. otherwise, it will be false. *)
+ let random_single_click : test = failwith "unimplemented"
 
+(**[random_multiple_clicks] generates a random number of random clicks, and clicks on a randomly sized, empty grid. 
+    for every click that is within bounds of the grid, there is a live square. *)
 let random_multiple_clicks : test = failwith "random multiple clicks unimplemented"
 
+(**[grow_random_grid] generates a randomly sized grid, clicks it at random.*)
 let grow_random_grid : test = failwith "a randomly created a grid can iterate like a grid. unimplemented"
 
 
