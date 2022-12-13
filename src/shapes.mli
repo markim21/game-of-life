@@ -1,39 +1,37 @@
-(*open Graphics*)
-open State
+(** Some shape definitions.
 
-(**[shape grid x y]*)
-type shape = grid -> int -> int -> unit 
-
-(**
-    Some shape definitions. 
-    These toggle the alive status of a set of coordinates to create a shape, 
-    using [m] and [n] as an origin in [grid],
+    This module provides helper functions to toggle the alive status of a set of
+    coordinates to create a shape, using [m] and [n] as an origin in [grid],
     updating [grid]*)
 
-(**[square_block] is a static square block*)
+open State
+
+type shape = grid -> int -> int -> unit
+(**[shape grid x y]*)
+
 val square_block : shape
+(**[square_block] is a static square block*)
 
-(**[right_glider] is a moving glider going right*)
 val right_glider : shape
+(**[right_glider] is a moving glider going right*)
 
-(**[left_glider] is a moving glider going left*)
 val left_glider : shape
+(**[left_glider] is a moving glider going left*)
 
-(**[l_spaceship] is a moving lightweight spaceship going left*)
 val l_spaceship : shape
+(**[l_spaceship] is a moving lightweight spaceship going left*)
 
-(**[penta] is a periodic penta decathlon*)
 val penta : shape
+(**[penta] is a periodic penta decathlon*)
 
-(**[line] is a 3-line horizontal*)
 val line : shape
+(**[line] is a 3-line horizontal*)
 
-(**[stack] is a 3-line vertical*)
 val stack : shape
+(**[stack] is a 3-line vertical*)
 
-(**[pulsar] is a pulsar*)
 val pulsar : shape
+(**[pulsar] is a pulsar*)
 
-(**[gun] is a gosper glider gun. 
-    requires a grid dimensions minimum of 34 x 4 *)
 val gun : shape
+(**[gun] is a gosper glider gun. requires a grid dimensions minimum of 34 x 4 *)
