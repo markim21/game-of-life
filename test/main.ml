@@ -665,6 +665,11 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
 let random_single_click : test = Random.self_init (); 
 grid_live_count_test "Randomly clicking once yields 1 living cell" 1 (get_changed_grid(fresh_grid 50 50 ()) (Random.int 50) (Random.int 50))
 
+let shapes_click_test = [
+
+  click_square_test 
+
+]
 
 let click_tests = [
   random_single_click;
@@ -696,7 +701,14 @@ let click_tests = [
   "creating a diagonal line"
   [(0,0); (1,1); (2,2)]
   (fresh_grid 3 3())
-  grid_B
+  grid_B;
+
+  click_square_test 
+  "creating an empty grid"
+  [(0,0); (0,0)]
+  (fresh_grid 3 3 ())
+  (fresh_grid 3 3 ());
+
 ]
 
 let state_tests = 
