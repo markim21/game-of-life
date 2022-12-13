@@ -515,7 +515,6 @@ let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test =
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
 (* generate a random number of clicks on a randomly sized grid, and count the number of live squares *)
-let random_live_count_test : test = failwith "RANDOM LIVE COUNT TEST"
 
 let live_count_tests = [
   grid_live_count_test 
@@ -621,17 +620,13 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
  name >:: fun _ -> assert_equal final_grid 
  (click_loop click_lst init_grid)
 
-let random_single_click : test = failwith "unimplemented"
-
-let random_multiple_clicks : test = failwith "random multiple clicks unimplemented"
-
-let grow_random_grid : test = failwith "a randomly created a grid can iterate like a grid. unimplemented"
+let random_single_click : test = Random.self_init (); 
+grid_live_count_test "Randomly clicking once yields 1 living cell" 1 (get_changed_grid(fresh_grid 50 50 ()) (Random.int 50) (Random.int 50))
 
 
 let click_tests = [
-  grow_random_grid;
+  (* grow_random_grid; *)
   random_single_click;
-  random_multiple_clicks;
   click_square_test 
   "clicking a dead toggles its alive-ness"
   [(0,0)]
