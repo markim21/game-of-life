@@ -633,6 +633,11 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
 
 (**[grow_random_grid] generates a randomly sized grid, clicks it at random.*)
 
+let shapes_click_test = [
+
+  click_square_test 
+
+]
 
 let click_tests = [
   click_square_test 
@@ -663,7 +668,14 @@ let click_tests = [
   "creating a diagonal line"
   [(0,0); (1,1); (2,2)]
   (fresh_grid 3 3())
-  grid_B
+  grid_B;
+
+  click_square_test 
+  "creating an empty grid"
+  [(0,0); (0,0)]
+  (fresh_grid 3 3 ())
+  (fresh_grid 3 3 ());
+
 ]
 
 let state_tests = 
