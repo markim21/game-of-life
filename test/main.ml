@@ -33,6 +33,8 @@ defined shape to ensure it showed up on screen wherever the player's mouse was.
 Using definitions of these grids from https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf, black box tests validated that the 
 shapes oscillated as predicted. 
 These shapes were also used to test the Grid and State module behavior. 
+The shape functions defined in [Shapes] should be idempotent, so we also made sure to test that applying any of those 
+functions a second time to the same [(x, y)] coordinate makes no further changes.
 
 These tests evaluate a variety of grids, both randomly generated and mathematically proven. Thorough black-box testing of all the 
 modules that define and pertain to the three game laws was important in demonstrating the correctness of the system, because they make up
@@ -582,6 +584,43 @@ let shapes_live_tests = [
 ]
 
 
+(** All shape functions should be idempotent. Here, [^2] means applying the function twice. *)
+let shapes_squared_live_tests = [
+  grid_live_count_test
+    "squares^2 have 4 live squares"
+    4
+    (square_block (square_block (fresh_grid 50 50 ())));
+  grid_live_count_test
+    "right gliders^2 have 5 live squares"
+    5 
+    (right_glider (right_glider (fresh_grid 50 50 ()) 10 10) 10 10);
+  grid_live_count_test
+    "left gliders^2 have 5 live squares"
+    5 
+    (left_glider (left_glider (fresh_grid 50 50 ()) 10 10) 10 10);
+  grid_live_count_test
+    "pulsars^2 have 48 live squares"
+    48
+    (pulsar (pulsar (fresh_grid 50 50 ())));
+  grid_live_count_test
+    "pentadecathlons^2 have 12 live squares"
+    12
+    (penta (penta (fresh_grid 50 50 ())));
+  grid_live_count_test
+    "LWSS^2 have 9 live squares"
+    9
+    (l_spaceship (l_spaceship (fresh_grid 50 50 ())));
+  grid_live_count_test
+    "lines^2 have 3 live squares"
+    3
+    (line (line (fresh_grid 50 50 ())));
+  grid_live_count_test 
+    "stacks^2 have 3 live squares"
+    3
+    (stack (stack (fresh_grid 50 50 ())));
+]
+
+
 (** TEST GRID.ML ***************************************)
 (** clicking a dead square will turn it alive, and vice versa. *)
 let square_grid = 
@@ -668,6 +707,7 @@ let state_tests =
 let shapes_tests = 
   shapes_oscillate_tests
   @ shapes_live_tests
+  @ shapes_squared_live_tests
 
 let tests = "test suite" >::: List.flatten [ state_tests; shapes_tests; click_tests]
 let _ = run_test_tt_main tests
