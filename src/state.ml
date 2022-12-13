@@ -2,14 +2,12 @@ open Array
 
 (* Define the components of a grid. *)
 
-(* every cell stores its location and alive status. *)
 type square = {
   x : int;
   y : int;
   alive : bool;
 }
 
-(* every grid has x by y dimensions and a 2D array of squares *)
 type grid = {
   x : int;
   y : int;
@@ -37,19 +35,17 @@ let coordinates =
     (ap1, ap1);
   ]
 
-(* helper function to test if coordinate is within grid dimensions *)
+(**[validate_boundary max min value] tests if coordinate [value] is within 
+    grid dimensions [max] and [min]*)
 let validate_boundary (max : int) (min : int) (value : int) =
   value < max && value >= min
 
-(*For a given block, return a list of the neighboring squares Filter invalid
-  coordinates - ie if the block is a edge piece. *)
 let rec get_neighbor_coordinates (square : square) (g : grid) (coords : ((int -> int) * (int -> int)) list) (neighbors : square list) : square list =
   (* iterate through every coordinate in coordinates list. *)
   match coords with
   | [] -> neighbors
   | (x, y) :: t ->
-      (* define x y = coordinates of the potential neighbor square we're
-         checking *)
+      (* define x y = coordinates of the potential neighbor square we're checking *)
       let x = x square.x in
       let y = y square.y in
 
@@ -57,8 +53,7 @@ let rec get_neighbor_coordinates (square : square) (g : grid) (coords : ((int ->
         get_neighbor_coordinates square g t (g.squares.(y).(x) :: neighbors)
       else get_neighbor_coordinates square g t neighbors
 
-(* For a list of squares, count the number of neighbors alive tail
-   recursively *)
+(* For a list of squares, count the number of neighbors alive tail-recursively *)
 let rec count_living_tr (lst : square list) (count : int) : int =
   match lst with
   | [] -> count
@@ -67,11 +62,12 @@ let rec count_living_tr (lst : square list) (count : int) : int =
 
 let get_live_count (lst : square list) : int = count_living_tr lst 0
 
-(* For a given square, determine the square's next state based on the square's
-   neighbors. 1. get the square's neighbors 2. get how many of its neighbors are
-   alive 3. if square is alive --> <game of life rules> 4. return new state as
-   boolean *)
-
+(* [get_next_square_state square grid] determine [square]'s next state based on 
+   [square]'s neighbors. 
+   1. get the square's neighbors 
+   2. get how many of its neighbors are alive 
+   3. if square is alive --> <game of life rules> 
+   4. return new state as boolean *)
 let get_next_square_state (square : square) (grid : grid) : bool =
   let live_count =
     get_neighbor_coordinates square grid coordinates [] |> get_live_count
@@ -81,10 +77,12 @@ let get_next_square_state (square : square) (grid : grid) : bool =
   else if live_count = 3 then true
   else false
 
+(**[change_square_state square grid] gets a square's next generation state 
+    based on its neighbors.*)
 let change_square_state (square : square) (grid : grid) : square =
   { x = square.x; y = square.y; alive = get_next_square_state square grid }
 
-(* Helper function to map a function to every element of a list *)
+(* *[twice_map] maps a function to every element of a 2D array *)
 let twice_map f = Array.map (Array.map f)
 
 (* Evaluate the new state for every block in a given grid. 

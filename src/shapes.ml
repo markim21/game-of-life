@@ -1,16 +1,19 @@
-open Graphics
+(*open Graphics*)
 open State
 
 type shape = grid -> int -> int -> unit
 
+(**[validate x y grid] returns a boolean if coordinates [x] and [y] are within
+    a given [grid]'s dimensions*)
 let validate x y grid = x < grid.x && y < grid.y && x >= 0 && y >= 0
 
+(**[set_square grid n m] updates [grid] at [n], [m] if they're within grid dimensions,
+    toggling the alive status of the square at [n], [m]*)
 let set_square grid n m =
   if validate m n grid then
     grid.squares.(m).(n) <- { x = n; y = m; alive = true };
   ()
 
-(* Some shape definitions *)
 
 (* Statics *)
 (* Square block *)
