@@ -5,55 +5,41 @@ open Game.State
 open Game.Shapes
 
 (**
-    The following modules were tested:
-The Menu module was tested manually, due to its entirely visual nature. 
-- start_menu,
-- menu_draw
-- listen_menu
-- square_num
-- rules_draw
-- patterns_draw 
+The following modules were tested manually: Menu, Loop, Grid 
+The following modules were tested with OUnit test cases: Grid, State, Shapes
+
+The Menu module was tested manually, due to its entirely visual nature. For [start_menu], [menu_draw], [listen_menu], [square_num], 
+[rules_draw], [patterns_draw], we made sure each part of the menu was drawn to the screen as intended.
 
 The Grid module was tested manually and with OUnit test cases. 
-- Visual functions draw_square, update_grid, init_grid were tested by clicking various parts of the screen to create grids.
-- The game loop [listen_square] was tested by clicking the screen to create a grid and pressing a key to generate a new generation for
-  the created grid.
+Visual functions [draw_square], [update_grid], [init_grid] are tested by clicking various parts of the screen to create grids.
+The game loop [listen_square] is tested by clicking the screen to create a grid and pressing a key to generate a new generation for
+the created grid. Black box tests were developed for [make_grid] and [change_grid] to ensure they created the right size grid and properly updated the
+grid's square array array when a square was clicked.
+Because these two functions are used by all of other modules menu, state, and loop, it was necessary to demonstrate these
+functions behaved as intended without knowledge of their implementation, so each every module that extended Grid could behave as intended.
 
-- Black box tests were developed for make_grid and change_grid to ensure they created the right size grid and properly updated the
-  grid's square array array when a square was clicked.
-  Because these two functions are used by all of other modules menu, state, and loop, it was necessary to demonstrate these
-  functions behaved as intended without knowledge of their implementation, so all members of the team could work on each module
-  asynchronously. 
-
-The State module was tested only with OUnit test cases. 
-
-- Black box tests were generated for new_generation to test the three rules of the game were being followed given
-  typical, simple grids (grid_bread, grid_diamond, grid_A/B/C) as well as extreme/outlier grids (an empty grid, a 
-  fully alive grid, and a randomly generated grid from https://www.dcode.fr/game-of-life.) 
-
-  Randomly generating a grid from a separate source and evaluating it by hand, as well as evaluating  was necessary to evaluating if 
-  the produced grid from [new_generation] was valid.
-
+The State module was tested only with OUnit test cases. Black box tests were generated for new_generation to test the three rules of the game 
+were being followed given typical, simple grids (grid_bread, grid_diamond, grid_A/B/C/D) as well as extreme/outlier grids (an empty grid, a 
+fully alive grid, and grids with randomly generated dimensions.
 
 The Loop module was tested manually due to its entirely visual nature. 
-- Before writing [loop_generations], we used [step] to increment the grid one generation at a time by keystroke.
-- After [step] produced generations of a grid by keystroke, we implemented and tested [loop_generations] using the
-  same grids used in the OUnit test cases for State and Grid.
+Before writing [loop_generations], we used [step] to increment the grid one generation at a time by keystroke.
+After [step] produced generations of a grid by keystroke, we implemented and tested [loop_generations] using the
+same grids used in the OUnit test cases for State and Grid, removing the ability to increment generations by keystroke.
 
+The Shapes module was tested manually and with OUnit test cases. We clicked the corresponding key binding for each 
+defined shape to ensure it showed up on screen wherever the player's mouse was. 
+Using definitions of these grids from https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf, black box tests validated that the 
+shapes oscillated as predicted. 
+These shapes were also used to test the Grid and State module behavior. 
 
-The Shapes module was tested manually and with OUnit test cases.
-
-- We clicked the corresponding key binding for each defined shape to ensure it showed up on screen wherever the 
-  player's mouse was. 
-- Using definitions of these grids from https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf, black box tests validated that the 
-  shapes oscillated as predicted. 
-- These shapes were also used to test the Grid and State module behavior. 
-
-These tests evaluate a variety of grids, both randomly generated and mathematically proven, using black-box testing of all the 
-modules that define and pertain to the three game laws, demonstrating the correctness of the system.*)
+These tests evaluate a variety of grids, both randomly generated and mathematically proven. Thorough black-box testing of all the 
+modules that define and pertain to the three game laws was important in demonstrating the correctness of the system, because they make up
+the foundation of John Conway's game. Because the game runs itself, no exceptions could possibly be made.
+*)
 
 (** BLACK BOX TESTING OF STATE.ML ******************************************)
-(** Define simple grids to check [new_generation] validity. *)
 
 (*[fresh_grid] given [m] and [n] create a new empty grid of those dimensions.*)
 let fresh_grid m n = 
@@ -87,7 +73,7 @@ let random_grid =
   match random_dimensions () with 
   | (m, n) -> fresh_grid m n ()
 
-
+(** Define simple grids to check [new_generation] validity. *)
 let empty_grid = make_grid 3 3
 let grid_bread_start =
   {
@@ -389,7 +375,6 @@ let next_generation_tests =
 
 
 (** BLACK BOX TESTING OF SHAPES.ML **************************************)
-(* create a fresh empty grid *)
 
 (*A square block is static, and remains the same no matter what*)
 let square_block g = square_block g 25 25; g
@@ -413,7 +398,6 @@ let pulsar g = pulsar g 25 25; g
 
 (* Gosper Glider Gun emits a new glider ever 30 generations *)
 let gun g = gun g 0 4; g 
-
 
 let shapes_oscillate_tests = [
   future_generations_test 
@@ -594,7 +578,7 @@ let shapes_live_tests = [
 ]
 
 
-(** GLASS BOX TEST GRID.ML ***************************************)
+(** TEST GRID.ML ***************************************)
 (** clicking a dead square will turn it alive, and vice versa. *)
 (* define one live square *)
 let square_grid = 
@@ -642,7 +626,6 @@ let random_single_click : test = failwith "unimplemented"
 let random_multiple_clicks : test = failwith "random multiple clicks unimplemented"
 
 let grow_random_grid : test = failwith "a randomly created a grid can iterate like a grid. unimplemented"
-
 
 
 let click_tests = [
