@@ -1,3 +1,9 @@
+(** Representation of start menu data.
+
+    This module represents the data in the start menu, including the grids,
+    patterns page, and rules page. It handles the transition from the start menu
+    to the game. *)
+
 val start_menu : unit -> unit
 (** [start_menu ()] creats a new game screen with size 1000x1000. *)
 
