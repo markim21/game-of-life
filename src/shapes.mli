@@ -1,12 +1,13 @@
-(*open Graphics*)
+(** Some shape definitions.
+
+    This module provides helper functions to toggle the alive status of a set of
+    coordinates to create a shape, using [m] and [n] as an origin in [grid],
+    updating [grid]*)
+
 open State
 
 type shape = grid -> int -> int -> unit
 (**[shape grid x y]*)
-
-(** Some shape definitions. These toggle the alive status of a set of
-    coordinates to create a shape, using [m] and [n] as an origin in [grid],
-    updating [grid]*)
 
 val square_block : shape
 (**[square_block] is a static square block*)

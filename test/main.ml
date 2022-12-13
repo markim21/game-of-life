@@ -521,8 +521,6 @@ let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test =
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
 (* generate a random number of clicks on a randomly sized grid, and count the number of live squares *)
-(*let random_live_count_test : test = failwith "RANDOM LIVE COUNT TEST"
-*)
 let live_count_tests = [
   grid_live_count_test 
     "an empty array has no alive squares"
@@ -625,13 +623,8 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
  name >:: fun _ -> assert_equal final_grid 
  (click_loop click_lst init_grid)
 
-(**[random_single_click] generates a randomly placed click onto a randomly sized, empty grid. if the click is within bounds,
-    then the number of lives will be one. otherwise, it will be false. *)
-
-(**[random_multiple_clicks] generates a random number of random clicks, and clicks on a randomly sized, empty grid. 
-    for every click that is within bounds of the grid, there is a live square. *)
-
-(**[grow_random_grid] generates a randomly sized grid, clicks it at random.*)
+let random_single_click : test = Random.self_init (); 
+grid_live_count_test "Randomly clicking once yields 1 living cell" 1 (get_changed_grid(fresh_grid 50 50 ()) (Random.int 50) (Random.int 50))
 
 let shapes_click_test = [
 
@@ -640,6 +633,7 @@ let shapes_click_test = [
 ]
 
 let click_tests = [
+  random_single_click;
   click_square_test 
   "clicking a dead toggles its alive-ness"
   [(0,0)]
