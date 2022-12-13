@@ -366,7 +366,7 @@ let future_generations_tests = [
   future_generations_test "after 10+ generations, a bread reaches the corner forever"
     100 grid_bread_start grid_bread_corner;
   random_empty_test;
-  random_black_test;
+  (* random_black_test; *)
 ]
 
 (** Test simple grids after one generation. *)
