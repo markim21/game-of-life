@@ -39,7 +39,7 @@ modules that define and pertain to the three game laws was important in demonstr
 the foundation of John Conway's game. Because the game runs itself, no exceptions could possibly be made.
 *)
 
-(** BLACK BOX TESTING OF STATE.ML ******************************************)
+(* BLACK BOX TESTING OF STATE.ML *)
 
 (*[fresh_grid] given [m] and [n] create a new empty grid of those dimensions.*)
 let fresh_grid m n = 
@@ -73,7 +73,7 @@ let random_grid =
   match random_dimensions () with 
   | (m, n) -> fresh_grid m n ()
 
-(** Define simple grids to check [new_generation] validity. *)
+(* Define simple grids to check [new_generation] validity. *)
 let empty_grid = make_grid 3 3
 let grid_bread_start =
   {
@@ -380,7 +380,7 @@ let next_generation_tests =
   ]
 
 
-(** BLACK BOX TESTING OF SHAPES.ML **************************************)
+(* BLACK BOX TESTING OF SHAPES.ML *)
 
 (*A square block is static, and remains the same no matter what*)
 let square_block g = square_block g 25 25; g
@@ -406,6 +406,7 @@ let pulsar g = pulsar g 25 25; g
 let gun g = gun g 0 4; g 
 
 let shapes_oscillate_tests = [
+  random_black_test;
   future_generations_test 
     "(left) gliders are p-4 oscillators that are offset diagonally by one cell"
     4
@@ -502,7 +503,7 @@ let shapes_oscillate_tests = [
 ]
 
 
-(** GLASS BOX TESTING OF STATE.ML ****************************)
+(* GLASS BOX TESTING OF STATE.ML *)
 
 (**[square_list_tr] turns a square array list into square list tail recursively*)
 let rec square_list_tr (acc : square list) (squares_lst) = 
@@ -544,8 +545,8 @@ let live_count_tests = [
     grid_bread_start
 ]
 
-(** BLACK BOX TESTING SHAPES.ML OF THE SHAPES LIVE COUNT ******************)
-(** The defined shapes must have proper shape. *)
+(* BLACK BOX TESTING SHAPES.ML OF THE SHAPES LIVE COUNT *)
+(* The defined shapes must have proper shape. *)
 let shapes_live_tests = [
   grid_live_count_test
     "squares have 4 live squares"
@@ -582,7 +583,7 @@ let shapes_live_tests = [
 ]
 
 
-(** TEST GRID.ML ***************************************)
+(* TEST GRID.ML *)
 (** clicking a dead square will turn it alive, and vice versa. *)
 let square_grid = 
   {
