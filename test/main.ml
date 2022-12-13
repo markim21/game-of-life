@@ -408,7 +408,6 @@ let pulsar g = pulsar g 25 25; g
 let gun g = gun g 0 4; g 
 
 let shapes_oscillate_tests = [
-  random_black_test;
   future_generations_test 
     "(left) gliders are p-4 oscillators that are offset diagonally by one cell"
     4
