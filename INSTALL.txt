@@ -1,9 +1,14 @@
-Commands to install necessary packages (may vary depending on terminal and OS):
+Commands to install necessary packages:
 
-brew install pkg-config xquartz (for mac users)
-opam install graphics
+Windows and Linux Users:
+1.Run opam install graphics 
+2.follow instructions on screen
+
+Mac Users:
+1. Run brew install pkg-config xquartz 
+2. Run opam install graphics 
 
 Commands to build:
 
-make build 
-make play 
+1. Run make build 
+2. Run make play 

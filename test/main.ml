@@ -66,7 +66,7 @@ let clear_grid grid state =
       done;
       array.(i) <- temp
     done;
-  {x = m; y = n; squares = array}
+  {x = n; y = m; squares = array}
 
 (* create a grid of random dimensions *)
 let random_grid = 
@@ -338,9 +338,15 @@ let future_generations_test (name : string) (generations : int) (init_grid : gri
   assert_equal final_grid
     (generation_loop generations init_grid)
 
+(**[random_black_test] generates a randomly sized grid, blacks out one, and proves that after 2 generations it will always be empty*)
 let random_black_test : test = 
-  let rg = random_grid in 
-  let bg = clear_grid rg true in 
+  let rand_dim = random_dimensions () in 
+  let new_grid = 
+  match rand_dim with 
+  | (x, y) -> fresh_grid x y () 
+  in 
+  let rg = clear_grid new_grid false in 
+  let bg = clear_grid new_grid true in 
   future_generations_test "after 2 generations, a fully alive grid becomes fully dead" 2 bg rg
 
 let random_empty_test : test = 
@@ -515,7 +521,6 @@ let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test =
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
 (* generate a random number of clicks on a randomly sized grid, and count the number of live squares *)
-
 let live_count_tests = [
   grid_live_count_test 
     "an empty array has no alive squares"
@@ -579,7 +584,6 @@ let shapes_live_tests = [
 
 (** TEST GRID.ML ***************************************)
 (** clicking a dead square will turn it alive, and vice versa. *)
-(* define one live square *)
 let square_grid = 
   {
     x = 1;
@@ -588,7 +592,6 @@ let square_grid =
     [| [| {x = 0; y = 0; alive = true}|] |]
   }
 
-(* define one dead square *)
 let dead_square_grid = 
   {
     x = 1;
@@ -625,7 +628,6 @@ grid_live_count_test "Randomly clicking once yields 1 living cell" 1 (get_change
 
 
 let click_tests = [
-  (* grow_random_grid; *)
   random_single_click;
   click_square_test 
   "clicking a dead toggles its alive-ness"
