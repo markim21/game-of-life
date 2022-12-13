@@ -56,7 +56,8 @@ let init_grid grid =
   fill_rect 0 0 1000 1000;
   update_grid grid
 
-
+(**[click_square y x grid] ensures the mouse coordinates [x] and [y] are 
+    within dimensions of the grid before it attempts to change_grid *)
 let click_square y x grid =
   change_grid grid (y * grid.y / 1000) (x * grid.x / 1000)
 

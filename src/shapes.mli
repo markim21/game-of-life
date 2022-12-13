@@ -2,7 +2,7 @@
 open State
 
 (**[shape grid x y]*)
-type shape = grid -> int -> int -> unit
+type shape = grid -> int -> int -> unit 
 
 (**
     Some shape definitions. 

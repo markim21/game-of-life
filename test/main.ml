@@ -4,6 +4,55 @@ open Game.Grid
 open Game.State
 open Game.Shapes
 
+(**
+    The following modules were tested:
+The Menu module was tested manually, due to its entirely visual nature. 
+- start_menu,
+- menu_draw
+- listen_menu
+- square_num
+- rules_draw
+- patterns_draw 
+
+The Grid module was tested manually, and with OUnit test cases. 
+- Visual functions draw_square, update_grid, init_grid were tested by clicking various parts of the screen to create grids.
+- The game loop [listen_square] was tested by clicking the screen to create a grid and pressing a key to generate a new generation for
+  the created grid.
+
+- Black box tests were developed for make_grid and change_grid to ensure they created the right size grid and properly updated the
+  grid's square array array when a square was clicked.
+  Because these two functions are used by all of other modules menu, state, and loop, it was necessary to demonstrate these
+  functions behaved as intended without knowledge of their implementation, so all members of the team could work on each module
+  asynchronously. 
+
+
+The State module was tested only with OUnit test cases. 
+
+- Black box tests were generated for new_generation to test the three rules of the game were being followed given
+  typical, simple grids (grid_bread, grid_diamond, grid_A/B/C) as well as extreme/outlier grids (an empty grid, a 
+  fully alive grid, and a randomly generated grid from https://www.dcode.fr/game-of-life.) 
+
+  Randomly generating a grid from a separate source and evaluating it by hand, as well as evaluating  was necessary to evaluating if 
+  the produced grid from [new_generation] was valid.
+
+
+The Loop module was tested manually due to its entirely visual nature. 
+- Before writing [loop_generations], we used [step] to increment the grid one generation at a time by keystroke.
+- After [step] produced generations of a grid by keystroke, we implemented and tested [loop_generations] using the
+  same grids used in the OUnit test cases for State and Grid.
+
+
+The Shapes module was tested manually and with OUnit test cases.
+
+- We clicked the corresponding key binding for each defined shape to ensure it showed up on screen wherever the 
+  player's mouse was. 
+- Using definitions of these grids from https://web.mit.edu/sp.268/www/2010/lifeSlides.pdf, black box tests validated that the 
+  shapes oscillated as predicted. 
+- These shapes were also used to test the Grid and State module behavior. 
+
+These tests evaluate a variety of grids, both randomly generated and mathematically proven, using black-box testing of all the 
+modules that define and pertain to the three game laws, demonstrating the correctness of the system.*)
+
 (** BLACK BOX TESTING OF STATE.ML ************************************)
 let empty_grid = make_grid 3 3
 let grid_bread_start =
@@ -420,7 +469,7 @@ let shapes_oscillate_tests = [
 ]
 
 
-(** GLASS BOX TESTING OF STATE.ML *)
+(** GLASS BOX TESTING OF STATE.ML ****************************)
 
 (**[square_list_tr] turns a square array list into square list tail recursively*)
 let rec square_list_tr (acc : square list) (squares_lst) = 
@@ -438,10 +487,6 @@ let square_array_to_lst (grid:grid) : square list =
 let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test = 
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
-(**[generation_live_count_test] tests function count_living_tr,
-    if the number of alive squares for a start generation and end generation are as predicted.*)
-let generation_live_count_test (name:string) (start_count : int) (init_grid : grid) (end_count : int ) (final_grid : grid) : test = 
-  name >:: fun _ -> failwith "unimplemented"
 
 let ap1 (a : int) : int = a + 1
 let am1 (a : int) : int = a - 1
@@ -462,6 +507,10 @@ let coordinates =
 let neighbors_test (name:string) (square:square) (grid:grid) (neighbors:square list) : test = 
   name >:: fun _ -> 
     assert_equal neighbors (get_neighbor_coordinates square grid coordinates [])
+
+let neighbors_tests = [
+
+]
 
 
 let live_count_tests = [
@@ -523,9 +572,7 @@ let shapes_live_tests = [
     (stack (fresh_grid 50 50 ()));
 ]
 
-let neighbors_tests = [
 
-]
 
 
 let state_tests = 
@@ -611,11 +658,5 @@ let click_tests = [
 ]
 
 
-
-let grid_tests = [  ]
-
-
-
-
-let tests = "test suite" >::: List.flatten [ state_tests; grid_tests; shapes_tests; click_tests]
+let tests = "test suite" >::: List.flatten [ state_tests; shapes_tests; click_tests]
 let _ = run_test_tt_main tests
