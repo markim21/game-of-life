@@ -18,11 +18,12 @@ let step grid =
   done;
   update_grid grid
 
-let loop_generations grid =
-  loop_at_exit [ Key_pressed ] (fun status ->
-      Unix.sleepf 0.3;
-      if key_pressed () then
-        match status.key with
-        | ' ' -> raise Exit
-        | _ -> step grid
-      else step grid)
+let rec loop_generations grid =
+  let status = wait_next_event [ Key_pressed ] in
+  match status.key with
+  | 'a' ->
+      while true do
+        step grid;
+        Unix.sleepf 0.3
+      done
+  | _ -> loop_generations grid

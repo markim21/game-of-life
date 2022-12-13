@@ -503,7 +503,7 @@ and patterns2_switch () =
   | '\t' -> patterns_draw ()
   | 'e' -> exit 0
   | ' ' -> menu_draw ()
-  | _ -> patterns_switch ()
+  | _ -> patterns2_switch ()
 
 and patterns_draw () =
   clear_graph ();
