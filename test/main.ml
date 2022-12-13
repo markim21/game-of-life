@@ -66,7 +66,7 @@ let clear_grid grid state =
       done;
       array.(i) <- temp
     done;
-  {x = m; y = n; squares = array}
+  {x = n; y = m; squares = array}
 
 (* create a grid of random dimensions *)
 let random_grid = 
@@ -515,8 +515,8 @@ let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test =
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
 (* generate a random number of clicks on a randomly sized grid, and count the number of live squares *)
-let random_live_count_test : test = failwith "RANDOM LIVE COUNT TEST"
-
+(*let random_live_count_test : test = failwith "RANDOM LIVE COUNT TEST"
+*)
 let live_count_tests = [
   grid_live_count_test 
     "an empty array has no alive squares"
@@ -580,7 +580,6 @@ let shapes_live_tests = [
 
 (** TEST GRID.ML ***************************************)
 (** clicking a dead square will turn it alive, and vice versa. *)
-(* define one live square *)
 let square_grid = 
   {
     x = 1;
@@ -589,7 +588,6 @@ let square_grid =
     [| [| {x = 0; y = 0; alive = true}|] |]
   }
 
-(* define one dead square *)
 let dead_square_grid = 
   {
     x = 1;
@@ -621,17 +619,16 @@ let click_square_test (name : string) click_lst (init_grid : grid) (final_grid :
  name >:: fun _ -> assert_equal final_grid 
  (click_loop click_lst init_grid)
 
-let random_single_click : test = failwith "unimplemented"
+(**[random_single_click] generates a randomly placed click onto a randomly sized, empty grid. if the click is within bounds,
+    then the number of lives will be one. otherwise, it will be false. *)
 
-let random_multiple_clicks : test = failwith "random multiple clicks unimplemented"
+(**[random_multiple_clicks] generates a random number of random clicks, and clicks on a randomly sized, empty grid. 
+    for every click that is within bounds of the grid, there is a live square. *)
 
-let grow_random_grid : test = failwith "a randomly created a grid can iterate like a grid. unimplemented"
+(**[grow_random_grid] generates a randomly sized grid, clicks it at random.*)
 
 
 let click_tests = [
-  grow_random_grid;
-  random_single_click;
-  random_multiple_clicks;
   click_square_test 
   "clicking a dead toggles its alive-ness"
   [(0,0)]
