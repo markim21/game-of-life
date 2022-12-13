@@ -11,7 +11,7 @@ let print_x_y x y =
 
 (**[make_new_matrix m n] returns a square array array
     with [m] x [n] dimensions. each square is initialized to be dead. *)
-  let make_new_matrix m n =
+let make_new_matrix m n =
   let array = Array.make m (Array.make n { x = 0; y = 0; alive = false }) in
   for i = 0 to m - 1 do
     let temp = Array.make n { x = 0; y = 0; alive = false } in

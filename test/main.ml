@@ -14,7 +14,7 @@ The Menu module was tested manually, due to its entirely visual nature.
 - rules_draw
 - patterns_draw 
 
-The Grid module was tested manually, and with OUnit test cases. 
+The Grid module was tested manually and with OUnit test cases. 
 - Visual functions draw_square, update_grid, init_grid were tested by clicking various parts of the screen to create grids.
 - The game loop [listen_square] was tested by clicking the screen to create a grid and pressing a key to generate a new generation for
   the created grid.
@@ -24,7 +24,6 @@ The Grid module was tested manually, and with OUnit test cases.
   Because these two functions are used by all of other modules menu, state, and loop, it was necessary to demonstrate these
   functions behaved as intended without knowledge of their implementation, so all members of the team could work on each module
   asynchronously. 
-
 
 The State module was tested only with OUnit test cases. 
 
@@ -53,13 +52,48 @@ The Shapes module was tested manually and with OUnit test cases.
 These tests evaluate a variety of grids, both randomly generated and mathematically proven, using black-box testing of all the 
 modules that define and pertain to the three game laws, demonstrating the correctness of the system.*)
 
-(** BLACK BOX TESTING OF STATE.ML ************************************)
+(** BLACK BOX TESTING OF STATE.ML ******************************************)
+(** Define simple grids to check [new_generation] validity. *)
+
+(*[fresh_grid] given [m] and [n] create a new empty grid of those dimensions.*)
+let fresh_grid m n = 
+  fun () -> 
+    make_grid m n 
+
+(*[random_dimensions] returns a pair of random integers (x, y) between 0 and 100 such that x = number of rows and y = number of columns in a grid. *)
+let random_dimensions = 
+  Random.self_init ();
+  fun () -> 
+    let m = Random.int 100 in 
+    let n = Random.int 100 in 
+    (m, n)
+
+(* [clear_grid] given a grid's dimensions, return a completely blacked out, alive grid. *)
+let clear_grid grid state = 
+  let m = grid.x in 
+  let n = grid.y in 
+  let array = Array.make m (Array.make n {x = 0; y = 0; alive = state}) in 
+    for i = 0 to m - 1 do
+      let temp = Array.make n { x = 0; y = 0; alive = state } in
+      for j = 0 to n - 1 do
+        temp.(j) <- { x = j; y = i; alive = state }
+      done;
+      array.(i) <- temp
+    done;
+  {x = m; y = n; squares = array}
+
+(* create a grid of random dimensions *)
+let random_grid = 
+  match random_dimensions () with 
+  | (m, n) -> fresh_grid m n ()
+
+
 let empty_grid = make_grid 3 3
 let grid_bread_start =
   {
     x = 5;
     y = 5;
-    squares : square array array =
+    squares =
       [|
         [|
           { x = 0; y = 0; alive = false };
@@ -297,7 +331,7 @@ let grid_C =
       |];
   }
 
-(** [next_generation_test] tests new_generation. 
+(** [next_generation_test] tests new_generation after one cycle of life.
     a given grid [init_grid] after one iteration should match next_grid based on the rules of life. *)
 let next_generation_test (name : string) (init_grid : grid) (next_grid : grid) :
     test =
@@ -311,24 +345,37 @@ let rec generation_loop remaining_generations grid =
         let new_population = new_generation grid in
         generation_loop (remaining_generations - 1) new_population
 
-(**[future_generations_test] tests new_generation. 
+(**[future_generations_test] tests new_generation after multiple cycles of life. 
     a given grid [init_grid] and a number of [generations] should match final_grid*)
 let future_generations_test (name : string) (generations : int) (init_grid : grid) (final_grid : grid) : test =
   name >:: fun _ ->
   assert_equal final_grid
     (generation_loop generations init_grid)
 
+let random_black_test : test = 
+  let rg = random_grid in 
+  let bg = clear_grid rg true in 
+  future_generations_test "after 2 generations, a fully alive grid becomes fully dead" 2 bg rg
+
+let random_empty_test : test = 
+  let rg = random_grid in 
+  future_generations_test "after 4 generations, a dead grid remains dead" 4 rg rg 
+
+(** Test simple grids after multiple generations. *)
 let future_generations_tests = [
-  future_generations_test "after 4 generations, a dead grid remains dead." 4
-      empty_grid empty_grid;
+  future_generations_test "after 4 generations, a dead grid remains dead." 
+    4 empty_grid empty_grid;
   future_generations_test "after 50+ generations, a diamond never changes its shape"
     100 grid_diamond grid_diamond;
   future_generations_test "after 8 generations, a bread transposes" 
     8 grid_bread_start grid_bread_end;
   future_generations_test "after 10+ generations, a bread reaches the corner forever"
     100 grid_bread_start grid_bread_corner;
+  random_empty_test;
+  random_black_test;
 ]
 
+(** Test simple grids after one generation. *)
 let next_generation_tests =
   [
     next_generation_test "a dead grid cannot produce a living grid on its own"
@@ -343,10 +390,6 @@ let next_generation_tests =
 
 (** BLACK BOX TESTING OF SHAPES.ML **************************************)
 (* create a fresh empty grid *)
-let fresh_grid m n = 
-  fun () -> 
-    make_grid m n 
-
 
 (*A square block is static, and remains the same no matter what*)
 let square_block g = square_block g 25 25; g
@@ -487,31 +530,8 @@ let square_array_to_lst (grid:grid) : square list =
 let grid_live_count_test (name: string) (live_count : int) (grid: grid) : test = 
   name >:: fun _ -> assert_equal live_count (square_array_to_lst grid |> get_live_count)  
 
-
-let ap1 (a : int) : int = a + 1
-let am1 (a : int) : int = a - 1
-let amp (a : int) : int = a
-
-let coordinates =
-  [
-    (am1, ap1);
-    (amp, ap1);
-    (ap1, am1);
-    (am1, amp);
-    (ap1, amp);
-    (am1, am1);
-    (amp, am1);
-    (ap1, ap1);
-  ]
-
-let neighbors_test (name:string) (square:square) (grid:grid) (neighbors:square list) : test = 
-  name >:: fun _ -> 
-    assert_equal neighbors (get_neighbor_coordinates square grid coordinates [])
-
-let neighbors_tests = [
-
-]
-
+(* generate a random number of clicks on a randomly sized grid, and count the number of live squares *)
+let random_live_count_test : test = failwith "RANDOM LIVE COUNT TEST"
 
 let live_count_tests = [
   grid_live_count_test 
@@ -536,7 +556,8 @@ let live_count_tests = [
     grid_bread_start
 ]
 
-(** BLACK BOX TESTING SHAPES.ML OF THE SHAPES LIVE COUNT *)
+(** BLACK BOX TESTING SHAPES.ML OF THE SHAPES LIVE COUNT ******************)
+(** The defined shapes must have proper shape. *)
 let shapes_live_tests = [
   grid_live_count_test
     "squares have 4 live squares"
@@ -573,21 +594,9 @@ let shapes_live_tests = [
 ]
 
 
-
-
-let state_tests = 
-  next_generation_tests 
-  @ future_generations_tests 
-  @ live_count_tests 
-  @ neighbors_tests
-
-let shapes_tests = 
-  shapes_oscillate_tests
-  @ shapes_live_tests
-
-
-(** GLASS BOX TEST GRID.ML *********************************)
-
+(** GLASS BOX TEST GRID.ML ***************************************)
+(** clicking a dead square will turn it alive, and vice versa. *)
+(* define one live square *)
 let square_grid = 
   {
     x = 1;
@@ -596,6 +605,7 @@ let square_grid =
     [| [| {x = 0; y = 0; alive = true}|] |]
   }
 
+(* define one dead square *)
 let dead_square_grid = 
   {
     x = 1;
@@ -604,6 +614,7 @@ let dead_square_grid =
     [| [| {x = 0; y = 0; alive = false}|] |]
   }
 
+(*[generation_loop remaining_generations grid] returns a grid after [grid] has passed through [remaining_generations] generations *)
 let rec generation_loop remaining_generations grid =
     match remaining_generations with
     | r when r <= 0 -> grid
@@ -611,21 +622,33 @@ let rec generation_loop remaining_generations grid =
         let new_population = new_generation grid in
         generation_loop (remaining_generations - 1) new_population
   
+(*[get_changed_grid] returns an updated grid when one square transitions from/to life*)
 let get_changed_grid g x y = 
   change_grid g x y; g 
 
+(*[click_loop click_lst grid] will toggle the squares in [grid] at the coordinates in [click_lst]*)
 let rec click_loop click_lst grid = 
   match click_lst with 
   | [] -> grid 
   | (x, y) :: t -> (click_loop t (get_changed_grid grid x y))
 
-(**[click_square_test] maintains that [final_grid] is equal to 
-    [final_grid] if you click [(x, y)...]*)
+(**[click_square_test] maintains that [final_grid] is equal to [final_grid] if you click a series of coordinates [(x, y)...]*)
 let click_square_test (name : string) click_lst (init_grid : grid) (final_grid : grid) : test =
  name >:: fun _ -> assert_equal final_grid 
  (click_loop click_lst init_grid)
 
+let random_single_click : test = failwith "unimplemented"
+
+let random_multiple_clicks : test = failwith "random multiple clicks unimplemented"
+
+let grow_random_grid : test = failwith "a randomly created a grid can iterate like a grid. unimplemented"
+
+
+
 let click_tests = [
+  grow_random_grid;
+  random_single_click;
+  random_multiple_clicks;
   click_square_test 
   "clicking a dead toggles its alive-ness"
   [(0,0)]
@@ -657,6 +680,14 @@ let click_tests = [
   grid_B
 ]
 
+let state_tests = 
+  next_generation_tests 
+  @ future_generations_tests 
+  @ live_count_tests 
+
+let shapes_tests = 
+  shapes_oscillate_tests
+  @ shapes_live_tests
 
 let tests = "test suite" >::: List.flatten [ state_tests; shapes_tests; click_tests]
 let _ = run_test_tt_main tests
